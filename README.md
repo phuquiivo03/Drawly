@@ -1,36 +1,129 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎁 Lucky Slot
 
-## Getting Started
+A simple social giveaway platform where users can create a giveaway, share an invite link, let others claim slots, and randomly select a winner.
 
-First, run the development server:
+## 💡 Concept
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Instead of directly giving away an item, the owner creates a **Lucky Slot event** and divides it into multiple slots.
+
+Example:
+
+```text
+🎁 Mechanical Keyboard
+
+20 slots
+10 people joined
+
+Share the link → Friends pick a slot → Random draw → 🎉 Winner
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The platform focuses on **simple sharing and social interaction**, rather than being a marketplace.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🔄 Main Flow
 
-## Learn More
+```text
+Create Event
+     ↓
+Add Item & Slots
+     ↓
+Generate Share Link
+     ↓
+Share to Facebook / X / Discord / ...
+     ↓
+Participants Join
+     ↓
+Claim a Slot
+     ↓
+All Slots Filled / Event Ends
+     ↓
+Random Draw
+     ↓
+🎉 Winner
+```
 
-To learn more about Next.js, take a look at the following resources:
+## 🔐 Authentication
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Users can access an event through its public link without logging in.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Authentication is only required when joining or creating an event.
 
-## Deploy on Vercel
+Supported providers can include:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Facebook
+- X
+- Email
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Supabase Auth manages authentication and user identities.
+
+---
+
+## 💰 Payment
+
+The platform can support both:
+
+- **Free events**
+- **Paid slots**
+
+For paid events, the platform does **not hold the money**.
+
+Participants pay directly to the event owner through their configured payment method. Payment verification can be added later through QR/bank/MoMo integrations.
+
+---
+
+## 🛠 Tech Stack
+
+### Frontend
+
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+
+### Backend / Services
+
+- Supabase Auth
+- Supabase PostgreSQL
+- Supabase Storage
+- Supabase Realtime
+
+No separate backend server is required for the MVP.
+
+---
+
+## 🗄 Core Data
+
+```text
+User
+ └── creates → Event
+                  │
+                  ├── Item
+                  ├── Slots
+                  │     └── Participant
+                  │
+                  └── Winner
+```
+
+Main tables:
+
+```text
+...
+```
+
+---
+
+## 🚀 MVP
+
+The first version focuses on:
+
+- Create a giveaway
+- Generate shareable link
+- Join an event
+- Claim a slot
+- Realtime slot updates
+- Random winner selection
+- Winner/result page
+- Social login
+
+Future features can include payment verification, live draw animation, notifications, and more social integrations.
