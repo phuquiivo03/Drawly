@@ -132,64 +132,14 @@ export default function LuckyReel({ rewards, winner }: Props) {
 
   return (
     <div className="flex w-full flex-col items-center">
-      {/* =====================================================
-          REEL
-      ====================================================== */}
-
       <div
         className="
-          relative
-          h-[230px]
-          w-full
-          overflow-hidden
-          border-y
-          border-white/[0.08]
-          bg-gradient-to-b
-          from-white/[0.025]
-          to-transparent
+          relative h-[230px] w-full overflow-hidden border-y  border-white/[0.08] bg-gradient-to-b  from-white/[0.025] to-transparent
         "
       >
-        {/* ===================================================
-            LEFT FADE
-        ==================================================== */}
+        <div className=" pointer-events-none absolute inset-y-0 left-0 z-10 w-[180px] bg-gradient-to-r  from-[#08090c]  via-[#08090c]/90  to-transparent" />
 
-        <div
-          className="
-            pointer-events-none
-            absolute
-            inset-y-0
-            left-0
-            z-10
-            w-[180px]
-            bg-gradient-to-r
-            from-[#08090c]
-            via-[#08090c]/90
-            to-transparent
-          "
-        />
-
-        {/* ===================================================
-            RIGHT FADE
-        ==================================================== */}
-
-        <div
-          className="
-            pointer-events-none
-            absolute
-            inset-y-0
-            right-0
-            z-10
-            w-[180px]
-            bg-gradient-to-l
-            from-[#08090c]
-            via-[#08090c]/90
-            to-transparent
-          "
-        />
-
-        {/* ===================================================
-            VIEWPORT
-        ==================================================== */}
+        <div className=" pointer-events-none absolute inset-y-0 right-0 z-10 w-[180px] bg-gradient-to-l from-[#08090c]  via-[#08090c]/90 to-transparent" />
 
         <div
           ref={viewportRef}
@@ -220,43 +170,15 @@ export default function LuckyReel({ rewards, winner }: Props) {
             CENTER INDICATOR
         ==================================================== */}
 
-        <div
-          className="
-            pointer-events-none
-            absolute
-            inset-y-0
-            left-1/2
-            z-20
-            w-[2px]
-            -translate-x-1/2
-          "
-        >
+        <div className=" pointer-events-none absolute inset-y-0 left-1/2 z-20 w-[2px] -translate-x-1/2">
           {/* Vertical line */}
 
-          <div
-            className="
-              absolute
-              inset-y-0
-              left-0
-              w-[2px]
-              bg-[#f5b400]
-              shadow-[0_0_12px_rgba(245,180,0,0.6)]
-            "
-          />
+          <div className=" absolute inset-y-0 left-0 w-[2px] bg-[#f5b400] shadow-[0_0_12px_rgba(245,180,0,0.6)]" />
 
           {/* Top arrow */}
 
           <div
-            className="
-              absolute
-              left-1/2
-              top-0
-              h-[14px]
-              w-[14px]
-              -translate-x-1/2
-              rotate-45
-              bg-[#f5b400]
-              shadow-[0_0_15px_rgba(245,180,0,0.5)]
+            className=" absolute left-1/2 top-0 h-[14px] w-[14px] -translate-x-1/2 rotate-45 bg-[#f5b400] shadow-[0_0_15px_rgba(245,180,0,0.5)]
             "
           />
         </div>
@@ -269,32 +191,18 @@ export default function LuckyReel({ rewards, winner }: Props) {
       <div className="flex h-[80px] items-center justify-center">
         {result && (
           <div
-            className="
-              flex
-              animate-[resultIn_350ms_ease-out]
-              flex-col
-              items-center
+            className=" flex animate-[resultIn_350ms_ease-out] flex-col items-center
             "
           >
             <span
-              className="
-                text-[9px]
-                font-extrabold
-                uppercase
-                tracking-[0.25em]
-                text-zinc-500
+              className=" text-[9px] font-extrabold uppercase tracking-[0.25em]  text-zinc-500
               "
             >
               You Won
             </span>
 
             <span
-              className="
-                mt-1
-                text-xl
-                font-black
-                text-[#f5b400]
-                drop-shadow-[0_0_20px_rgba(245,180,0,0.4)]
+              className=" mt-1 text-xl font-black text-[#f5b400] drop-shadow-[0_0_20px_rgba(245,180,0,0.4)]
               "
             >
               {result.name}
@@ -303,32 +211,11 @@ export default function LuckyReel({ rewards, winner }: Props) {
         )}
       </div>
 
-      {/* =====================================================
-          BUTTON
-      ====================================================== */}
-
       <button
         type="button"
         disabled={isSpinning}
         onClick={spin}
-        className="
-          mt-6
-          min-w-[220px]
-          rounded-sm
-          bg-[#f5b400]
-          px-8
-          py-4
-          text-[13px]
-          font-black
-          tracking-[0.08em]
-          text-black
-          transition-all
-          duration-150
-          hover:brightness-110
-          hover:-translate-y-px
-          active:translate-y-px
-          disabled:cursor-not-allowed
-          disabled:opacity-50
+        className=" mt-6 min-w-[220px] rounded-sm bg-[#f5b400] px-8 py-4 text-[13px] font-black tracking-[0.08em] text-black transition-all duration-150 hover:brightness-110 hover:-translate-y-px active:translate-y-px disabled:cursor-not-allowed disabled:opacity-50
         "
       >
         {isSpinning ? "OPENING..." : "OPEN CASE"}
