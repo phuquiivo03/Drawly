@@ -1,9 +1,9 @@
 import {
   CreateEvent,
   createEventRequestSchema,
-  createEventSchema,
 } from "@/features/event/event.schema";
 import { createEvent } from "@/features/event/event.service";
+import { createManyPrizes } from "@/features/prize/prize.service";
 import { createManySlots } from "@/features/slot/slot.service";
 import { generateServerSeed, hash } from "@/lib/crypto.helper";
 import { createSlotsData } from "@/lib/helper";
@@ -14,6 +14,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const parseResult = createEventRequestSchema.safeParse(body);
     if (parseResult.error) throw new Error(parseResult.error.message);
+
     // generate seed -> hash
     const serverSeed = generateServerSeed();
     const hashed = hash(serverSeed);
@@ -24,6 +25,17 @@ export async function POST(req: NextRequest) {
     };
     const createResult = await createEvent(eventData);
     if (!createResult) throw new Error("create event fail");
+
+    // create prize
+    const createPrizeData = parseResult.data.prizes.map((data) => {
+      return { ...data, event_id: createResult.id };
+    });
+    console.log("Start crete prize");
+    const prize = await createManyPrizes(createPrizeData);
+    if (!prize || prize.length == 0) {
+      throw new Error("Fail to create Prizes!");
+    }
+
     // create slots
     const max_slot = parseInt(parseResult.data.max_slot || "50");
     const slots = createSlotsData(max_slot, createResult.id);
@@ -41,7 +53,9 @@ export async function POST(req: NextRequest) {
     return Response.json({
       success: false,
       status: 401,
-      message: (e as Error).message || "Fail to create event!!",
+      message:
+        JSON.parse(JSON.stringify((e as Error).message)) ||
+        "Fail to create event!!",
     });
   }
 }

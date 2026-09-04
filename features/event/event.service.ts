@@ -4,12 +4,21 @@ import { ShortSlot, Slot } from "../slot/slot.schema";
 import slotRepository from "../slot/slot.repository";
 import { createParticipantsPayload } from "@/lib/helper";
 import { getWinnerIndex, hash } from "@/lib/crypto.helper";
+import { findByEventId } from "../prize/prize.service";
+import { Prize } from "../prize/prize.schema";
 export const createEvent = async (eventData: CreateEvent) => {
   try {
     return await eventRepository.create(eventData);
   } catch (e) {
     throw e;
   }
+};
+
+export const findById = async (id: string) => {
+  const event = await eventRepository.findById(id);
+  if (!event) throw new Error("Fail to find event");
+  const eventPrizes = await findByEventId(id);
+  return { ...event, prizes: eventPrizes };
 };
 
 export const getEventWiner = async (eventId: string): Promise<ShortSlot> => {
