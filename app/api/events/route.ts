@@ -3,8 +3,8 @@ import {
   createEventRequestSchema,
 } from "@/features/event/event.schema";
 import { createEvent } from "@/features/event/event.service";
-import { createManyPrizes } from "@/features/prize/prize.service";
-import { createManySlots } from "@/features/slot/slot.service";
+import serviceService from "@/features/prize/prize.service";
+import slotServices from "@/features/slot/slot.service";
 import { generateServerSeed, hash } from "@/lib/crypto.helper";
 import { createSlotsData } from "@/lib/helper";
 import { NextRequest } from "next/server";
@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
       return { ...data, event_id: createResult.id };
     });
     console.log("Start crete prize");
-    const prize = await createManyPrizes(createPrizeData);
+    const prize = await serviceService.createManyPrizes(createPrizeData);
     if (!prize || prize.length == 0) {
       throw new Error("Fail to create Prizes!");
     }
@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
     // create slots
     const max_slot = parseInt(parseResult.data.max_slot || "50");
     const slots = createSlotsData(max_slot, createResult.id);
-    const createdSlots = await createManySlots(slots);
+    const createdSlots = await slotServices.createManySlots(slots);
     if (createdSlots) {
       return Response.json({
         success: true,

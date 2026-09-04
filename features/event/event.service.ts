@@ -4,8 +4,7 @@ import { ShortSlot, Slot } from "../slot/slot.schema";
 import slotRepository from "../slot/slot.repository";
 import { createParticipantsPayload } from "@/lib/helper";
 import { getWinnerIndex, hash } from "@/lib/crypto.helper";
-import { findByEventId } from "../prize/prize.service";
-import { Prize } from "../prize/prize.schema";
+import prizeService from "../prize/prize.service";
 export const createEvent = async (eventData: CreateEvent) => {
   try {
     return await eventRepository.create(eventData);
@@ -14,14 +13,14 @@ export const createEvent = async (eventData: CreateEvent) => {
   }
 };
 
-export const findById = async (id: string) => {
+const findById = async (id: string) => {
   const event = await eventRepository.findById(id);
   if (!event) throw new Error("Fail to find event");
-  const eventPrizes = await findByEventId(id);
+  const eventPrizes = await prizeService.findByEventId(id);
   return { ...event, prizes: eventPrizes };
 };
 
-export const getEventWiner = async (eventId: string): Promise<ShortSlot> => {
+const getEventWiner = async (eventId: string): Promise<ShortSlot> => {
   // hash (seed + eventId + (participants -> normalize -> hash)) % length
   const event = await eventRepository.findById(eventId);
   if (!event) throw new Error("Event not found!");
@@ -43,4 +42,10 @@ export const getEventWiner = async (eventId: string): Promise<ShortSlot> => {
   // update event status
   await eventRepository.updateStatus(event, EventStatus.CLOSE);
   return winner;
+};
+
+export default {
+  createEvent,
+  findById,
+  getEventWiner,
 };

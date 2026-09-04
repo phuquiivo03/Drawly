@@ -1,8 +1,6 @@
 import { CreateSlot, Slot, SlotStatus } from "./slot.schema";
 import slotRepository from "./slot.repository";
-export const createSlot = async (
-  slotData: CreateSlot,
-): Promise<Slot | null> => {
+const createSlot = async (slotData: CreateSlot): Promise<Slot | null> => {
   try {
     return await slotRepository.create(slotData);
   } catch (e) {
@@ -10,7 +8,7 @@ export const createSlot = async (
   }
 };
 
-export const createManySlots = async (
+const createManySlots = async (
   slotData: CreateSlot[],
 ): Promise<Slot[] | null> => {
   try {
@@ -22,3 +20,5 @@ export const createManySlots = async (
     throw e;
   }
 };
+
+export default { createSlot, createManySlots };

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Profile } from "@/features/profile/profile.schema";
 import { AppResponse } from "../../type";
-import { findById } from "@/features/profile/profile.service";
+import profileService from "@/features/profile/profile.service";
 interface RouteContext {
   params: Promise<{
     id: string;
@@ -10,7 +10,7 @@ interface RouteContext {
 export async function GET(req: NextRequest, { params }: RouteContext) {
   try {
     const { id } = await params;
-    const profileData = await findById(id);
+    const profileData = await profileService.findById(id);
     if (!profileData) {
       return Response.json({
         success: false,
@@ -28,7 +28,7 @@ export async function GET(req: NextRequest, { params }: RouteContext) {
     return Response.json({
       success: false,
       status: 500,
-      message: 'e.message',
+      message: "e.message",
     });
   }
 }

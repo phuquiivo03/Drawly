@@ -1,4 +1,4 @@
-import { getEventWiner } from "@/features/event/event.service";
+import eventService from "@/features/event/event.service";
 import { NextRequest } from "next/server";
 interface RouteContext {
   params: Promise<{
@@ -9,7 +9,7 @@ export async function GET(req: NextRequest, { params }: RouteContext) {
   try {
     const { id } = await params;
     if (!id) throw new Error("Event Id not found");
-    const result = await getEventWiner(id);
+    const result = await eventService.getEventWiner(id);
     return Response.json({
       success: true,
       status: 200,
