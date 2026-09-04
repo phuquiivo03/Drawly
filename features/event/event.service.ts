@@ -20,6 +20,8 @@ const findById = async (id: string) => {
   return { ...event, prizes: eventPrizes };
 };
 
+
+
 const getEventWiner = async (eventId: string): Promise<ShortSlot> => {
   // hash (seed + eventId + (participants -> normalize -> hash)) % length
   const event = await eventRepository.findById(eventId);
