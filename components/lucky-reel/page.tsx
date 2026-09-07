@@ -42,18 +42,10 @@ const rewards: Reward[] = [
 
 const winner = rewards[5];
 
-export default function Reel() {
+export default function Reel({ className }: { className?: string }) {
   return (
-    <main className="page">
+    <main className={`page ${className}`}>
       <section className="case-opening">
-        <div className="case-header">
-          <span className="case-eyebrow">CASE OPENING</span>
-
-          <h1>LEGENDARY CASE</h1>
-
-          <p>Open the case and discover your reward.</p>
-        </div>
-
         <LuckyReel rewards={rewards} winner={winner} />
       </section>
     </main>
