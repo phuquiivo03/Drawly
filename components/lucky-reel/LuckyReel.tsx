@@ -5,6 +5,7 @@ import gsap from "gsap";
 
 import RewardCard from "./RewardCard";
 import type { Reward } from "./types";
+import Reel from "./Reel";
 
 const CARD_WIDTH = 180;
 const CARD_GAP = 12;
@@ -15,7 +16,7 @@ const WINNER_INDEX = REEL_SIZE - 8;
 
 const SPIN_DURATION = 6.5;
 
-type ReelItem = Reward & {
+export type ReelItem = Reward & {
   reelId: string;
 };
 
@@ -132,57 +133,7 @@ export default function LuckyReel({ rewards, winner }: Props) {
 
   return (
     <div className="flex w-full flex-col items-center">
-      <div
-        className="
-          relative h-[230px] w-full overflow-hidden border-y  border-white/[0.08] bg-gradient-to-b  from-white/[0.025] to-transparent
-        "
-      >
-        <div className=" pointer-events-none absolute inset-y-0 left-0 z-10 w-[180px] bg-gradient-to-r  from-[#08090c]  via-[#08090c]/90  to-transparent" />
-
-        <div className=" pointer-events-none absolute inset-y-0 right-0 z-10 w-[180px] bg-gradient-to-l from-[#08090c]  via-[#08090c]/90 to-transparent" />
-
-        <div
-          ref={viewportRef}
-          className="
-            h-full
-            w-full
-            overflow-hidden
-          "
-        >
-          <div
-            ref={trackRef}
-            className="
-              flex
-              h-full
-              w-max
-              items-center
-              gap-3
-              will-change-transform
-            "
-          >
-            {items.map((item) => (
-              <RewardCard key={item.reelId} reward={item} />
-            ))}
-          </div>
-        </div>
-
-        {/* ===================================================
-            CENTER INDICATOR
-        ==================================================== */}
-
-        <div className=" pointer-events-none absolute inset-y-0 left-1/2 z-20 w-[2px] -translate-x-1/2">
-          {/* Vertical line */}
-
-          <div className=" absolute inset-y-0 left-0 w-[2px] bg-[#f5b400] shadow-[0_0_12px_rgba(245,180,0,0.6)]" />
-
-          {/* Top arrow */}
-
-          <div
-            className=" absolute left-1/2 top-0 h-[14px] w-[14px] -translate-x-1/2 rotate-45 bg-[#f5b400] shadow-[0_0_15px_rgba(245,180,0,0.5)]
-            "
-          />
-        </div>
-      </div>
+      <Reel viewportRef={viewportRef} trackRef={trackRef} items={items} />
 
       {/* =====================================================
           RESULT
