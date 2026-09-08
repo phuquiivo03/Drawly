@@ -1,5 +1,5 @@
 import z from "zod";
-import { createPrizeRequestSchema } from "../prize/prize.schema";
+import { createPrizeRequestSchema, Prize } from "../prize/prize.schema";
 export enum EventStatus {
   OPEN = "open",
   FULL = "full",
@@ -31,3 +31,4 @@ export const createEventRequestSchema = z.object({
 
 export type Event = z.infer<typeof eventChema>;
 export type CreateEvent = z.infer<typeof createEventSchema>;
+export type EventWithPrize = Event & { prizes: Prize[] };

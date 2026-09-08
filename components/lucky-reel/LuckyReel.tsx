@@ -6,6 +6,7 @@ import gsap from "gsap";
 import type { Reward } from "./types";
 import Reel from "./Reel";
 import { DrawButton } from "../events/DrawButton";
+import ResultPopup from "./ResultPopup";
 
 const CARD_WIDTH = 180;
 const CARD_GAP = 12;
@@ -31,6 +32,7 @@ export default function LuckyReel({ rewards, winner }: Props) {
 
   const [items, setItems] = useState<ReelItem[]>([]);
   const [isSpinning, setIsSpinning] = useState(false);
+  const [resultShow, setResultShow] = useState(false);
   const [result, setResult] = useState<Reward | null>(null);
 
   const createReel = useCallback(() => {
@@ -56,7 +58,10 @@ export default function LuckyReel({ rewards, winner }: Props) {
   useEffect(() => {
     setItems(createReel());
   }, [createReel]);
-
+  useEffect(() => {
+    if (result == null) return;
+    setResultShow(true);
+  }, [result]);
   const spin = () => {
     if (isSpinning || !viewportRef.current || !trackRef.current) {
       return;
@@ -121,29 +126,8 @@ export default function LuckyReel({ rewards, winner }: Props) {
           RESULT
       ====================================================== */}
 
-      <div className="flex h-[80px] items-center justify-center">
-        {result && (
-          <div
-            className=" flex animate-[resultIn_350ms_ease-out] flex-col items-center
-            "
-          >
-            <span
-              className=" text-[9px] font-extrabold uppercase tracking-[0.25em]  text-zinc-500
-              "
-            >
-              You Won
-            </span>
-
-            <span
-              className=" mt-1 text-xl font-black text-[#f5b400] drop-shadow-[0_0_20px_rgba(245,180,0,0.4)]
-              "
-            >
-              {result.name}
-            </span>
-          </div>
-        )}
-      </div>
-
+      <div className="flex h-[80px] items-center justify-center"></div>
+      <ResultPopup setShowResult={setResultShow} showResult={resultShow} />
       <DrawButton isSpinning={isSpinning} onClick={spin} />
     </div>
   );
