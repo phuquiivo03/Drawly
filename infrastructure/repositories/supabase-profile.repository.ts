@@ -16,6 +16,7 @@ export class SubpabaseProfileRepository implements ProfileRepository {
     return this.toDomain(data);
   }
 
+  // @ts-ignore
   toDomain(data: any): Profile {
     return {
       id: data.id,

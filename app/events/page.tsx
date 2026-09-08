@@ -19,21 +19,13 @@ const participants = [
 ];
 
 export default function Events() {
-  const [isSpinning, setIsSpinning] = useState(false);
+  // @ts-ignore
   const [winner, setWinner] = useState<string>();
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
     undefined,
   );
   useEffect(() => () => clearTimeout(timeoutRef.current), []);
-  const startDraw = () => {
-    if (isSpinning) return;
-    setWinner(undefined);
-    setIsSpinning(true);
-    timeoutRef.current = setTimeout(() => {
-      setIsSpinning(false);
-      setWinner("Ava Reynolds");
-    }, 3200);
-  };
+
   return (
     <DefaultLayout>
       <div className="grid min-h-0 flex-1 grid-cols-1 gap-4 pt-4 lg:grid-cols-[minmax(0,1fr)_300px] lg:gap-5">

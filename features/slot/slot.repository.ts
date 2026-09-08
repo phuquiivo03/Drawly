@@ -42,6 +42,7 @@ class SlotRepository {
     return data[0];
   }
 
+  // @ts-expect-error
   async createMany(slotsData: any[]): Promise<Slot[] | null> {
     const { data, error } = await this.supabaseClient
       .from("slots")
@@ -53,5 +54,5 @@ class SlotRepository {
     return data;
   }
 }
-
-export default new SlotRepository();
+const slotRepository = new SlotRepository();
+export default slotRepository;

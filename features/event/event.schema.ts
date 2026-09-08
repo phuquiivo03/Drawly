@@ -1,8 +1,5 @@
 import z from "zod";
-import {
-  createPrizeRequestSchema,
-  createPrizeSchema,
-} from "../prize/prize.schema";
+import { createPrizeRequestSchema } from "../prize/prize.schema";
 export enum EventStatus {
   OPEN = "open",
   FULL = "full",
@@ -19,7 +16,6 @@ export const eventChema = z.object({
   creator_id: z.string(),
   created_at: z.date(),
 });
-
 
 export const createEventSchema = z.object({
   server_seed: z.string(),

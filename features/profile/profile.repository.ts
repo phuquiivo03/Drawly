@@ -20,4 +20,5 @@ class ProfileRepository {
   }
 }
 
-export default new ProfileRepository();
+const profileRepository = new ProfileRepository();
+export default profileRepository;

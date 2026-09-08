@@ -11,4 +11,5 @@ const findByEventId = async (id: string) => {
   return await prizeRepository.findByEventId(id);
 };
 
-export default { createManyPrizes, createPrize, findByEventId };
+const prizeServices = { createManyPrizes, createPrize, findByEventId };
+export default prizeServices;

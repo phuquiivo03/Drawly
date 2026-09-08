@@ -1,4 +1,4 @@
-import { CreateSlot, ShortSlot, Slot } from "@/features/slot/slot.schema";
+import { CreateSlot, ShortSlot } from "@/features/slot/slot.schema";
 
 export const createSlotsData = (max: number, eventId: string): CreateSlot[] => {
   const result = [];
@@ -16,4 +16,3 @@ export const createSlotsData = (max: number, eventId: string): CreateSlot[] => {
 export function createParticipantsPayload(slots: ShortSlot[]) {
   return slots.map((slot) => `${slot.slot_number}:${slot.user_id}`).join("|");
 }
-

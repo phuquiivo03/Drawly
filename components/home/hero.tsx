@@ -49,8 +49,8 @@ function HomeHero() {
 
       {/* stats */}
       <div className="mt-10 flex gap-6 sm:gap-10">
-        {stats.map((stat) => (
-          <Stat value={stat.value} unit={stat.unit} />
+        {stats.map((stat, index) => (
+          <Stat key={index} value={stat.value} unit={stat.unit} />
         ))}
       </div>
     </div>

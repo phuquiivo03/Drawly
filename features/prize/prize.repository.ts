@@ -53,4 +53,5 @@ class PrizeRepository {
   }
 }
 
-export default new PrizeRepository();
+const prizeRepository = new PrizeRepository();
+export default prizeRepository;

@@ -1,6 +1,6 @@
 import { CreateEvent, EventStatus } from "./event.schema";
 import eventRepository from "./event.repository";
-import { ShortSlot, Slot } from "../slot/slot.schema";
+import { ShortSlot } from "../slot/slot.schema";
 import slotRepository from "../slot/slot.repository";
 import { createParticipantsPayload } from "@/lib/helper";
 import { getWinnerIndex, hash } from "@/lib/crypto.helper";
@@ -19,8 +19,6 @@ const findById = async (id: string) => {
   const eventPrizes = await prizeService.findByEventId(id);
   return { ...event, prizes: eventPrizes };
 };
-
-
 
 const getEventWiner = async (eventId: string): Promise<ShortSlot> => {
   // hash (seed + eventId + (participants -> normalize -> hash)) % length
@@ -45,9 +43,9 @@ const getEventWiner = async (eventId: string): Promise<ShortSlot> => {
   await eventRepository.updateStatus(event, EventStatus.CLOSE);
   return winner;
 };
-
-export default {
+const eventServices = {
   createEvent,
   findById,
   getEventWiner,
 };
+export default eventServices;

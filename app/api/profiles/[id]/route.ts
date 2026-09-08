@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { Profile } from "@/features/profile/profile.schema";
 import { AppResponse } from "../../type";
 import profileService from "@/features/profile/profile.service";
@@ -28,7 +28,7 @@ export async function GET(req: NextRequest, { params }: RouteContext) {
     return Response.json({
       success: false,
       status: 500,
-      message: "e.message",
+      message: (e as Error).message || "Unknow error",
     });
   }
 }

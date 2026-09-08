@@ -1,11 +1,7 @@
 "use client";
 import FrostedPanels from "@/components/background/panels";
-import Header from "@/components/header";
 import HomeHero from "@/components/home/hero";
-import StatusBadge from "@/components/home/statusBadge";
 import DefaultLayout from "@/components/layout/default";
-import Reel from "@/components/lucky-reel/page";
-import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { useEffect } from "react";
 const reelItems = [
@@ -102,7 +98,7 @@ export default function Home() {
                       key={`${item.name}-${index}`}
                       className={`relative flex w-36 shrink-0 flex-col justify-between overflow-hidden border border-ink/10 bg-white/80 p-2.5 shadow-sm ${item.rarity}`}
                     >
-                      <img
+                      <Image
                         src={item.image}
                         alt={`${item.name} ${item.type}`}
                         width={768}

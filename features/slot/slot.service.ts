@@ -21,4 +21,5 @@ const createManySlots = async (
   }
 };
 
-export default { createSlot, createManySlots };
+const slotServices = { createSlot, createManySlots };
+export default slotServices;

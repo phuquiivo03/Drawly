@@ -1,11 +1,12 @@
 import { Gift } from "lucide-react";
+import Image from "next/image";
 
 export function RewardCard() {
   return (
     <div className="flex min-h-0 items-center gap-4 rounded-2xl border border-ink/8 bg-white/65 p-3 sm:gap-5 sm:p-4">
       <div className="grid aspect-square h-20 shrink-0 place-items-center overflow-hidden rounded-xl border border-ink/10 bg-white shadow-sm sm:h-24">
-        <img
-          src={'reelPistolGold'}
+        <Image
+          src={"/golden-pistol.png"}
           alt="Royal Etch gold pistol reward"
           className="h-full w-full object-contain p-1 mix-blend-multiply"
         />
