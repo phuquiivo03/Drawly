@@ -1,4 +1,4 @@
-import Button from "../ui/button";
+import { Button } from "../ui/button";
 import Stat from "./stat";
 import StatusBadge from "./statusBadge";
 
@@ -41,7 +41,7 @@ function HomeHero() {
           </span>
           New Event
         </button>
-        <Button click={() => {}}>
+        <Button onClick={() => {}}>
           Watch a spin
           <span className="text-brand">→</span>
         </Button>

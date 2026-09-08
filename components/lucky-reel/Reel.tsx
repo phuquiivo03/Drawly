@@ -48,17 +48,10 @@ function Reel(props: Props) {
                 CENTER INDICATOR
             ==================================================== */}
 
-      <div className=" pointer-events-none absolute inset-y-0 left-1/2 z-20 w-[2px] -translate-x-1/2">
-        {/* Vertical line */}
+      <div className="pointer-events-none absolute inset-y-0 left-1/2 z-20 w-0.5 -translate-x-1/2 bg-accent shadow-[0_0_14px_var(--color-accent)]">
+        <span className="absolute left-1/2 top-0 -translate-x-1/2 border-x-[8px] border-t-[10px] border-x-transparent border-t-accent" />
 
-        <div className=" absolute inset-y-0 left-0 w-[2px] bg-[#f5b400] shadow-[0_0_12px_rgba(245,180,0,0.6)]" />
-
-        {/* Top arrow */}
-
-        <div
-          className=" absolute left-1/2 top-0 h-[14px] w-[14px] -translate-x-1/2 rotate-45 bg-[#f5b400] shadow-[0_0_15px_rgba(245,180,0,0.5)]
-                "
-        />
+        <span className="absolute bottom-0 left-1/2 -translate-x-1/2 border-x-[8px] border-b-[10px] border-x-transparent border-b-accent" />
       </div>
     </div>
   );

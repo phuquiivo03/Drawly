@@ -3,9 +3,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 
-import RewardCard from "./RewardCard";
 import type { Reward } from "./types";
 import Reel from "./Reel";
+import { DrawButton } from "../events/DrawButton";
 
 const CARD_WIDTH = 180;
 const CARD_GAP = 12;
@@ -106,27 +106,9 @@ export default function LuckyReel({ rewards, winner }: Props) {
        * Chạy nhanh → giảm tốc mạnh.
        */
       timeline.to(track, {
-        x: targetX - 70,
+        x: targetX - Math.floor(Math.random() * 70 * 2 - 70),
         duration: SPIN_DURATION - 0.7,
         ease: "power4.out",
-      });
-
-      /*
-       * Overshoot nhẹ.
-       */
-      timeline.to(track, {
-        x: targetX + 12,
-        duration: 0.4,
-        ease: "power2.out",
-      });
-
-      /*
-       * Settle về winner.
-       */
-      timeline.to(track, {
-        x: targetX,
-        duration: 0.3,
-        ease: "power2.out",
       });
     });
   };
@@ -162,15 +144,7 @@ export default function LuckyReel({ rewards, winner }: Props) {
         )}
       </div>
 
-      <button
-        type="button"
-        disabled={isSpinning}
-        onClick={spin}
-        className=" mt-6 min-w-[220px] rounded-sm bg-[#f5b400] px-8 py-4 text-[13px] font-black tracking-[0.08em] text-black transition-all duration-150 hover:brightness-110 hover:-translate-y-px active:translate-y-px disabled:cursor-not-allowed disabled:opacity-50
-        "
-      >
-        {isSpinning ? "OPENING..." : "OPEN CASE"}
-      </button>
+      <DrawButton isSpinning={isSpinning} onClick={spin} />
     </div>
   );
 }

@@ -5,7 +5,7 @@ import HomeHero from "@/components/home/hero";
 import StatusBadge from "@/components/home/statusBadge";
 import DefaultLayout from "@/components/layout/default";
 import Reel from "@/components/lucky-reel/page";
-import Button from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { useEffect } from "react";
 const reelItems = [
