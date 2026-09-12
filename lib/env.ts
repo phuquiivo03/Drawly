@@ -5,6 +5,7 @@ export const appEnv = {
       ? {
           supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
           supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL!,
+          supabaseServiceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY!,
           facebook: {
             clientSecret: process.env.NEXT_PUBLIC_FACEBOOK_CLIENT_SECRET!,
             clientId: process.env.NEXT_PUBLIC_FACEBOOK_CLIENT_ID!,

@@ -1,4 +1,5 @@
 "use client";
+import CreateEventForm from "@/components/events/CreateEventForm";
 import { Participants } from "@/components/events/Participants";
 import { RewardCard } from "@/components/events/RewardCard";
 import DefaultLayout from "@/components/layout/default";
@@ -28,13 +29,7 @@ export default function Events() {
 
   return (
     <DefaultLayout>
-      <div className="grid min-h-0 flex-1 grid-cols-1 gap-4 pt-4 lg:grid-cols-[minmax(0,1fr)_300px] lg:gap-5">
-        <section className="grid min-h-0 grid-rows-[auto_minmax(0,1fr)_auto] gap-4 rounded-[24px] border border-white/80 bg-white/55 p-4 shadow-2xl shadow-sky-200/50 backdrop-blur-2xl sm:p-5 lg:p-6">
-          <RewardCard />
-          <Reel />
-        </section>
-        <Participants participants={participants} winner={winner || null} />
-      </div>
+      <CreateEventForm />
     </DefaultLayout>
   );
 }

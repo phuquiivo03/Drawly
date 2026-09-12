@@ -19,6 +19,7 @@ export async function POST(req: NextRequest) {
     const serverSeed = generateServerSeed();
     const hashed = hash(serverSeed);
     const eventData: CreateEvent = {
+      lock_at: parseResult.data.lock_at,
       server_seed: serverSeed,
       server_seed_hash: hashed,
       creator_id: parseResult.data.creator_id,

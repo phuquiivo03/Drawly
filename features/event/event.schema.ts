@@ -13,6 +13,7 @@ export const eventChema = z.object({
   status: z.enum(EventStatus),
   server_seed: z.string(),
   server_seed_hash: z.string(),
+  lock_at: z.string().optional(),
   creator_id: z.string(),
   created_at: z.date(),
 });
@@ -20,11 +21,13 @@ export const eventChema = z.object({
 export const createEventSchema = z.object({
   server_seed: z.string(),
   server_seed_hash: z.string(),
+  lock_at: z.string().optional(),
   creator_id: z.string(),
 });
 
 export const createEventRequestSchema = z.object({
   max_slot: z.string().optional(),
+  lock_at: z.string().optional(),
   creator_id: z.string(),
   prizes: z.array(createPrizeRequestSchema),
 });
@@ -32,3 +35,4 @@ export const createEventRequestSchema = z.object({
 export type Event = z.infer<typeof eventChema>;
 export type CreateEvent = z.infer<typeof createEventSchema>;
 export type EventWithPrize = Event & { prizes: Prize[] };
+export type CreateEventRequest = z.infer<typeof createEventRequestSchema>;
