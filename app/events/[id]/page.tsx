@@ -26,6 +26,7 @@ export default function Page({ id }: { id: string }) {
   );
   const setEvent = useEventStore((state) => state.setEvent);
   useEffect(() => {
+    console.log("fetch event");
     fetch(`/api/events/${id}`)
       .then((res) => res.json())
       .then((data) => {

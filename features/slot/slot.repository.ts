@@ -7,7 +7,7 @@ class SlotRepository {
   constructor() {
     this.supabaseClient = createClient();
   }
-  
+
   async findById(id: string): Promise<Slot | null> {
     const { data, error } = await this.supabaseClient
       .from("slots")

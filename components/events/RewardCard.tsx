@@ -8,7 +8,7 @@ export function RewardCard() {
   return (
     <div className="flex min-h-0 items-center gap-4 rounded-2xl border border-ink/8 bg-white/65 p-3 sm:gap-5 sm:p-4">
       <div className="grid aspect-square h-20 shrink-0 place-items-center overflow-hidden rounded-xl border border-ink/10 bg-white shadow-sm sm:h-24">
-        <ImageViewer src={event?.prizes[0].images[0] || ""} />
+        <ImageViewer src={event?.prizes[0]?.images[0] || "/image-break.png"} />
       </div>
 
       <div className="min-w-0">
@@ -18,11 +18,11 @@ export function RewardCard() {
         </span>
 
         <h1 className="mt-1 truncate font-display text-xl font-bold sm:text-2xl">
-          {event?.prizes[0].name}
+          {event?.prizes[0]?.name}
         </h1>
 
         <p className="mt-1 line-clamp-2 text-sm text-ink/55">
-          {event?.prizes[0].description}
+          {event?.prizes[0]?.description}
         </p>
       </div>
 
