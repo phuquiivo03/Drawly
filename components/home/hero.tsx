@@ -35,13 +35,16 @@ function HomeHero() {
 
       <div className="mt-8 flex flex-wrap items-center gap-4">
         {/* NEW EVENT BUTTON */}
-        <button className="group inline-flex cursor-pointer items-center gap-2.5 rounded-2xl bg-accent px-7 py-4 text-base font-bold text-white shadow-xl shadow-accent/30 transition hover:-translate-y-0.5 hover:shadow-2xl">
+        <Button
+          size="xl"
+          className="group inline-flex cursor-pointer items-center gap-2.5 rounded-2xl bg-accent! px-7 py-4 text-base font-bold text-white shadow-xl shadow-accent/30 transition  hover:shadow-2xl"
+        >
           <span className="grid size-6 place-items-center rounded-full bg-white/25 text-xl leading-none">
             +
           </span>
           New Event
-        </button>
-        <Button onClick={() => {}}>
+        </Button>
+        <Button size="xl" className="  px-7 py-4" onClick={() => {}}>
           Watch a spin
           <span className="text-brand">→</span>
         </Button>

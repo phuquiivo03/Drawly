@@ -2,6 +2,8 @@
 import FrostedPanels from "@/components/background/panels";
 import HomeHero from "@/components/home/hero";
 import DefaultLayout from "@/components/layout/default";
+import Profile from "@/components/profile";
+import FacebookLogin from "@/components/ui/facebookLogin";
 import Image from "next/image";
 import { useEffect } from "react";
 const reelItems = [
@@ -56,9 +58,9 @@ const reelItems = [
 ];
 export default function Home() {
   useEffect(() => {
-    fetch("/api/profile/123e4567-e89b-12d3-a456-426614174000").then((data) => {
-      console.log("profile response: ", data);
-    });
+    // fetch("/api/profile/123e4567-e89b-12d3-a456-426614174000").then((data) => {
+    //   console.log("profile response: ", data);
+    // });
   }, []);
   return (
     <DefaultLayout>
@@ -103,7 +105,7 @@ export default function Home() {
                         alt={`${item.name} ${item.type}`}
                         width={768}
                         height={512}
-                        className="h-24 w-full object-contain mix-blend-multiply"
+                        className="h-24 w-full object-contain mix-blend-multiply "
                       />
                       <div>
                         <p className="truncate text-[10px] font-semibold uppercase text-ink/40">

@@ -1,4 +1,14 @@
+"use client";
+
+import { useUserStore } from "@/stores/user.store";
+import Image from "next/image";
+import { useState } from "react";
+import SigninOption from "./ui/signinOptions";
+import ProfileMenu from "./ui/profileMenu";
+
 function Header() {
+  const [show, setShow] = useState<boolean>(false);
+  const user = useUserStore((state) => state.user);
   return (
     <div className="">
       {/* HEADER */}
@@ -25,14 +35,26 @@ function Header() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <button className="hidden cursor-pointer rounded-full border border-ink/10 bg-white/60 px-5 py-2.5 text-sm font-semibold text-ink backdrop-blur transition hover:bg-white sm:inline-flex">
-            Sign in
-          </button>
-          <button className="cursor-pointer rounded-full bg-ink px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-ink/20 transition hover:-translate-y-0.5">
-            Launch reel
-          </button>
+          {user && user.user_metadata ? (
+            <ProfileMenu />
+          ) : (
+            <>
+              <button
+                onClick={() => {
+                  setShow(true);
+                }}
+                className="hidden cursor-pointer rounded-full border border-ink/10 bg-white/60 px-5 py-2.5 text-sm font-semibold text-ink backdrop-blur transition hover:bg-white sm:inline-flex"
+              >
+                Sign in
+              </button>
+              <button className="cursor-pointer rounded-full bg-ink px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-ink/20 transition hover:-translate-y-0.5">
+                Launch reel
+              </button>
+            </>
+          )}
         </div>
       </header>
+      {show && <SigninOption open={show} setOpen={setShow} />}
     </div>
   );
 }
