@@ -1,4 +1,4 @@
-const nodeEnv = process.env.NODE_ENV || "development";
+const nodeEnv = process.env.NEXT_PUBLIC_NODE_ENV || "development";
 export const appEnv = {
   infrastructure:
     nodeEnv == "development"
