@@ -35,7 +35,7 @@ function Header() {
         </nav>
 
         <div className="flex items-center gap-3">
-          {user && user.user_metadata ? (
+          {user ? (
             <ProfileMenu />
           ) : (
             <>

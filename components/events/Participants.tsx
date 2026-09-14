@@ -1,4 +1,6 @@
-import { Users } from "lucide-react";
+import { UserPlus, Users } from "lucide-react";
+import { CopyToClipboard } from "../ui/copyToClipboard";
+import { useEventStore } from "@/stores/events.store";
 
 interface ParticipantsProps {
   participants: string[][];
@@ -6,8 +8,9 @@ interface ParticipantsProps {
 }
 
 export function Participants({ participants, winner }: ParticipantsProps) {
+  const event = useEventStore((state) => state.event);
   return (
-    <aside className="flex min-h-0 flex-col rounded-[24px] border border-white/80 bg-white/60 p-4 shadow-2xl shadow-sky-200/45 backdrop-blur-2xl sm:p-5">
+    <aside className="flex min-h-0 flex-col max-h-[80vh] rounded-[24px] border border-white/80 bg-white/60 p-4 shadow-2xl shadow-sky-200/45 backdrop-blur-2xl sm:p-5">
       <div className="flex items-start justify-between border-b border-ink/8 pb-4">
         <div>
           <p className="flex items-center gap-2 font-display text-lg font-bold">
@@ -18,9 +21,20 @@ export function Participants({ participants, winner }: ParticipantsProps) {
           <p className="mt-1 text-xs text-ink/45">Everyone in this draw</p>
         </div>
 
-        <span className="rounded-full bg-brand/10 px-2.5 py-1 text-xs font-bold text-brand">
-          10 / 12
-        </span>
+        <div className="">
+          <span className="rounded-full bg-brand/10 px-2.5 py-1 text-xs font-bold text-brand">
+            10 / 12
+          </span>
+          <div className="flex gap-2 items-center mt-1">
+            <UserPlus className="size-4 text-brand" />
+            {event && (
+              <CopyToClipboard
+                text={`${window.location.origin}/events/${event.id}`}
+                className="text-accent hover:opacity-70"
+              />
+            )}
+          </div>
+        </div>
       </div>
 
       <div className="min-h-0 flex-1 space-y-2 overflow-y-auto py-3 pr-1">

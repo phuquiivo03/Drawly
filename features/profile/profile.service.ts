@@ -1,8 +1,14 @@
 import profileRepository from "./profile.repository";
-import { Profile } from "./profile.schema";
+import { CreateProfile, Profile } from "./profile.schema";
 
 const findById = async (id: string): Promise<Profile | null> => {
   return await profileRepository.findById(id);
 };
-const profileServices = { findById };
+const create = async (data: CreateProfile): Promise<Profile | null> => {
+  return await profileRepository.create(data);
+};
+const findBySocialId = async (id: string): Promise<Profile | null> => {
+  return await profileRepository.findBysocialId(id);
+};
+const profileServices = { findById, create, findBySocialId };
 export default profileServices;

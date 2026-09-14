@@ -1,5 +1,8 @@
 import { NextRequest } from "next/server";
-import { Profile } from "@/features/profile/profile.schema";
+import {
+  createProfileSchema,
+  Profile,
+} from "@/features/profile/profile.schema";
 import { AppResponse } from "../../type";
 import profileService from "@/features/profile/profile.service";
 interface RouteContext {
@@ -29,6 +32,30 @@ export async function GET(req: NextRequest, { params }: RouteContext) {
       success: false,
       status: 500,
       message: (e as Error).message || "Unknow error",
+    });
+  }
+}
+
+export async function POST(req: NextRequest) {
+  try {
+    const body = await req.json();
+    const parseResult = createProfileSchema.safeParse(body);
+    if (parseResult.error) throw new Error(parseResult.error.message);
+    const result = await profileService.create(parseResult.data);
+    return Response.json({
+      success: true,
+      status: 201,
+      data: result,
+    });
+  } catch (e) {
+    console.log("===============ERROR============");
+    console.error(e);
+    return Response.json({
+      success: false,
+      status: 401,
+      message:
+        JSON.parse(JSON.stringify((e as Error).message)) ||
+        "Fail to create event!!",
     });
   }
 }

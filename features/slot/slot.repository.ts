@@ -25,7 +25,6 @@ class SlotRepository {
       .from("slots")
       .select("id, slot_number, user_id")
       .eq("event_id", eventId)
-      .not("user_id", "is", null)
       .eq("status", SlotStatus.AVAILABLE);
 
     if (error) throw new Error("Fail to find participant");

@@ -21,5 +21,14 @@ const createManySlots = async (
   }
 };
 
-const slotServices = { createSlot, createManySlots };
+const findManySlots = async (eventId: string) => {
+  try {
+    const data = await slotRepository.findManyByEvent(eventId);
+    return data;
+  } catch (e) {
+    throw e;
+  }
+};
+
+const slotServices = { createSlot, createManySlots, findManySlots };
 export default slotServices;

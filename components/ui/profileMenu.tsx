@@ -1,9 +1,7 @@
 import { useUserStore } from "@/stores/user.store";
 import Image from "next/image";
 import { useState } from "react";
-import { Button } from "./button";
 import { LogOut } from "lucide-react";
-import { createClient } from "@/infrastructure/supabase/server";
 
 function ProfileMenu() {
   const { user, setUser } = useUserStore((state) => state);
@@ -24,7 +22,7 @@ function ProfileMenu() {
         console.error("Logout failed!");
       });
   };
-  if (!user || !user.user_metadata) return;
+  if (!user) return;
   return (
     <div
       className=" relative"
@@ -37,11 +35,11 @@ function ProfileMenu() {
     >
       <div className=" flex gap-2  items-center">
         <span className="text-black font-bold text-md">
-          {user.user_metadata.nickname}
+          {user.display_name}
         </span>
         <Image
           className="rounded-full w-9 h-9 border-[1px] border-accent "
-          src={user.user_metadata.avatar_url}
+          src={user.avatar_url}
           width={200}
           height={200}
           alt=""

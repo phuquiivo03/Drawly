@@ -2,8 +2,6 @@
 import FrostedPanels from "@/components/background/panels";
 import HomeHero from "@/components/home/hero";
 import DefaultLayout from "@/components/layout/default";
-import Profile from "@/components/profile";
-import FacebookLogin from "@/components/ui/facebookLogin";
 import Image from "next/image";
 import { useEffect } from "react";
 const reelItems = [

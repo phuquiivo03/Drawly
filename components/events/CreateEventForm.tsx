@@ -289,6 +289,7 @@ export default function CreateEventForm() {
             <div className="grid grid-cols-4 gap-3">
               {images.map((image, index) => (
                 <UploadedImage
+                key={index}
                   url={image.url}
                   name={image.name}
                   removeImage={removeImage}

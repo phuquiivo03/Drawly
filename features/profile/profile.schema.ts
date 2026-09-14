@@ -5,9 +5,15 @@ export const profileSchema = z.object({
   display_name: z.string(),
   email: z.string().optional(),
   avatar_url: z.string(),
+  social_ref_id: z.string(),
   created_at: z.date(),
 });
-
+export const createProfileSchema = z.object({
+  display_name: z.string(),
+  email: z.string().optional(),
+  social_ref_id: z.string(),
+  avatar_url: z.string(),
+});
 export type AuthProvider = "facebook";
 
 export type UserMetadata = {
@@ -57,5 +63,5 @@ export type SocialUser = {
   updated_at: string;
   is_anonymous: boolean;
 };
-
+export type CreateProfile = z.infer<typeof createProfileSchema>;
 export type Profile = z.infer<typeof profileSchema>;
