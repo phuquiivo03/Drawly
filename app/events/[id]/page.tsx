@@ -5,24 +5,9 @@ import SlotPickerPopup from "@/components/events/SlotPickerPopup";
 import DefaultLayout from "@/components/layout/default";
 import Reel from "@/components/lucky-reel/page";
 import { Button } from "@/components/ui/button";
-import { Slot } from "@/features/slot/slot.schema";
+import { SlotExpand } from "@/features/slot/slot.schema";
 import { useEventStore } from "@/stores/events.store";
 import { useEffect, useRef, useState } from "react";
-
-const participantsx = [
-  ["AR", "Ava Reynolds"],
-  ["JM", "Jordan Miller"],
-  ["SK", "Sam Kim"],
-  ["MP", "Mia Patel"],
-  ["LN", "Leo Nguyen"],
-  ["OT", "Olivia Taylor"],
-  ["NC", "Noah Chen"],
-  ["ES", "Emma Stone"],
-  ["WB", "William Brown"],
-  ["WB", "William Brown"],
-  ["WB", "William Brown"],
-  ["SH", "Sofia Hernandez"],
-];
 
 export default function Page({ id }: { id: string }) {
   const [winner, setWinner] = useState<string>();
@@ -33,7 +18,6 @@ export default function Page({ id }: { id: string }) {
   const { setEvent, event, setSlots, setParticipants, participants, slots } =
     useEventStore((state) => state);
   useEffect(() => {
-    console.log("fetch event");
     fetch(`/api/events/${id}`)
       .then((res) => res.json())
       .then((data) => {
@@ -50,25 +34,20 @@ export default function Page({ id }: { id: string }) {
         .then((data) => {
           if (data.data) {
             const participants = data.data.reduce(
-              (prev: Slot[], slot: Slot) => {
+              (prev: SlotExpand[], slot: SlotExpand) => {
                 return slot.user_id ? [...prev, slot] : prev;
               },
               [],
             );
-            const slots = data.data.reduce((prev: Slot[], slot: Slot) => {
-              return slot.user_id ? prev : [...prev, slot];
-            }, []);
+            const sorted = (data.data as SlotExpand[]).sort((a, b) => {
+              return parseInt(a.slot_number) - parseInt(b.slot_number);
+            });
+            setSlots(sorted);
             setParticipants(participants);
-            setSlots(slots);
           }
         });
     }
   }, [event]);
-
-  useEffect(() => {
-    console.log("parti: ", participants);
-    console.log("slots: ", slots);
-  }, [slots, participants]);
   return (
     <DefaultLayout>
       <Button
@@ -84,7 +63,7 @@ export default function Page({ id }: { id: string }) {
           <RewardCard />
           <Reel />
         </section>
-        <Participants participants={participantsx} winner={winner || null} />
+        <Participants participants={participants} winner={winner || null} />
       </div>
     </DefaultLayout>
   );

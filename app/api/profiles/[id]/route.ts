@@ -48,8 +48,6 @@ export async function POST(req: NextRequest) {
       data: result,
     });
   } catch (e) {
-    console.log("===============ERROR============");
-    console.error(e);
     return Response.json({
       success: false,
       status: 401,

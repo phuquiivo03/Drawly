@@ -131,7 +131,6 @@ export default function CreateEventForm() {
           },
         ],
       };
-      console.log("create event data :", eventData);
       const response = await fetch("/api/events", {
         method: "POST",
         headers: {

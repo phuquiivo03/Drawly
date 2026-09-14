@@ -7,8 +7,6 @@ import { toast } from "react-toastify";
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const { user, setUser } = useUserStore((state) => state);
-  const setError = useerrorStore((state) => state.setError);
-  console.log(user);
   useEffect(() => {
     if (!user)
       fetch("/api/auth/facebook")

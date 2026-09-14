@@ -1,3 +1,4 @@
+import profileServices from "@/features/profile/profile.service";
 import { createClient } from "@/infrastructure/supabase/server";
 import { NextResponse } from "next/server";
 
@@ -8,16 +9,16 @@ export async function requireAuth() {
     data: { user },
     error,
   } = await supabase.auth.getUser();
-
   if (error || !user) {
     return {
       user: null,
       response: NextResponse.json({ message: "Unauthorized" }, { status: 403 }),
     };
   }
+  const profile = await profileServices.findBySocialId(user.id);
 
   return {
-    user,
+    profile,
     response: null,
   };
 }

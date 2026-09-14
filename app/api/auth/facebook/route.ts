@@ -15,7 +15,6 @@ export async function GET() {
         message: "Profile not found",
       });
     }
-    console.log(user);
     // check and create data
     const profile = await profileServices.findBySocialId(
       (user as SocialUser).id,
@@ -35,7 +34,6 @@ export async function GET() {
     }
     return Response.json(profile);
   } catch (e) {
-    console.log(e);
     return Response.json({
       success: false,
       status: 500,

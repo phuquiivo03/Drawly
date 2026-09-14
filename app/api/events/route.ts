@@ -31,7 +31,6 @@ export async function POST(req: NextRequest) {
     const createPrizeData = parseResult.data.prizes.map((data) => {
       return { ...data, event_id: createResult.id };
     });
-    console.log("Start crete prize");
     const prize = await serviceService.createManyPrizes(createPrizeData);
     if (!prize || prize.length == 0) {
       throw new Error("Fail to create Prizes!");
@@ -49,8 +48,6 @@ export async function POST(req: NextRequest) {
       });
     }
   } catch (e) {
-    console.log("===============ERROR============");
-    console.error(e);
     return Response.json({
       success: false,
       status: 401,

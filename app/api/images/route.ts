@@ -6,7 +6,8 @@ export async function POST(request: Request) {
   const { user, response } = await requireAuth();
 
   if (!user) {
-    return response;
+    if (response) return response;
+    throw new Error("Unauthen");
   }
   try {
     const formData = await request.formData();

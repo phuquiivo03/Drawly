@@ -30,5 +30,22 @@ const findManySlots = async (eventId: string) => {
   }
 };
 
-const slotServices = { createSlot, createManySlots, findManySlots };
+const checkAndUpdateSlot = async (
+  slotId: string,
+  userId: string,
+): Promise<Slot | null> => {
+  const slot = await slotRepository.findById(slotId);
+  if (slot?.user_id) {
+    throw new Error("Slot have been taken");
+  }
+  const result = await slotRepository.updateUserId(slotId, userId);
+  return result;
+};
+
+const slotServices = {
+  createSlot,
+  createManySlots,
+  findManySlots,
+  checkAndUpdateSlot,
+};
 export default slotServices;

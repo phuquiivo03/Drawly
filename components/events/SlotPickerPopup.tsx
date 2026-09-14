@@ -1,5 +1,11 @@
-import { X } from "lucide-react";
+import { Loader2, X } from "lucide-react";
 import { Button } from "../ui/button";
+import { useEventStore } from "@/stores/events.store";
+import { AppResponse } from "@/app/api/type";
+import { Slot } from "@/features/slot/slot.schema";
+import { useState } from "react";
+import { toast } from "react-toastify";
+import SlotItem from "./SlotItem";
 
 type Props = {
   show: boolean;
@@ -7,10 +13,7 @@ type Props = {
 };
 
 function SlotPickerPopup({ show, setShow }: Props) {
-  const ls = [];
-  for (let i = 1; i < 50; i++) {
-    ls.push(i);
-  }
+  const { slots, setSlots } = useEventStore((state) => state);
 
   return (
     <div
@@ -28,12 +31,8 @@ function SlotPickerPopup({ show, setShow }: Props) {
           <X className="size-4" />
         </button>
         <div className="grid w-fit grid-cols-8 gap-2 mt-6">
-          {ls.map((item, index) => {
-            return (
-              <Button key={index} variant="default">
-                {item}
-              </Button>
-            );
+          {slots.map((item, index) => {
+            return <SlotItem item={item} key={index} />;
           })}
         </div>
       </div>

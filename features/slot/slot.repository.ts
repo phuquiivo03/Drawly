@@ -23,10 +23,9 @@ class SlotRepository {
   async findManyByEvent(eventId: string): Promise<ShortSlot[] | null> {
     const { data, error } = await this.supabaseClient
       .from("slots")
-      .select("id, slot_number, user_id")
+      .select("*, profile:profiles(*)")
       .eq("event_id", eventId)
       .eq("status", SlotStatus.AVAILABLE);
-
     if (error) throw new Error("Fail to find participant");
     return data;
   }
@@ -47,6 +46,21 @@ class SlotRepository {
       .from("slots")
       .insert(slotsData)
       .select();
+    if (error) {
+      throw error;
+    }
+    return data;
+  }
+
+  async updateUserId(slotId: string, userId: string): Promise<Slot | null> {
+    const { data, error } = await this.supabaseClient
+      .from("slots")
+      .update({
+        user_id: userId,
+      })
+      .eq("id", slotId)
+      .select("*, profile:profiles(*)")
+      .maybeSingle();
     if (error) {
       throw error;
     }

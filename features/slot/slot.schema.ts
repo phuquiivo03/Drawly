@@ -1,4 +1,5 @@
 import z from "zod";
+import { Profile, profileSchema } from "../profile/profile.schema";
 export enum SlotStatus {
   AVAILABLE = "available",
 }
@@ -23,5 +24,6 @@ export const createSlotSchema = z.object({
 });
 
 export type Slot = z.infer<typeof slotSchema>;
+export type SlotExpand = Slot & { profile: Profile | null };
 export type ShortSlot = z.infer<typeof shortSlotSchema>;
 export type CreateSlot = z.infer<typeof createSlotSchema>;
