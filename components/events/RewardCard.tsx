@@ -5,10 +5,17 @@ import ImageViewer from "../ui/ImageViewer";
 import { Event, EventStatus } from "@/features/event/event.schema";
 import { toast } from "react-toastify";
 import { AppResponse } from "@/app/api/type";
+import { useUserStore } from "@/stores/user.store";
 
 export function RewardCard() {
   const { event, setEvent } = useEventStore((state) => state);
+  const user = useUserStore((state) => state.user);
   if (!event) return;
+  const classes = user
+    ? event?.creator_id === user.id && event.status != EventStatus.CLOSE
+      ? "group"
+      : ""
+    : "";
   const handleUpdateEventStatus = (status: EventStatus) => {
     fetch(`/api/events/${event.id}`, {
       method: "PATCH",
@@ -51,7 +58,11 @@ export function RewardCard() {
         {event?.status}
       </span>
       <button
-        className="group"
+        disabled={
+          !(user != null && event?.creator_id === user.id) ||
+          event.status == EventStatus.CLOSE
+        }
+        className={classes}
         onClick={() => {
           handleUpdateEventStatus(
             event.status == EventStatus.LOCKED

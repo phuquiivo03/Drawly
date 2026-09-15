@@ -14,7 +14,6 @@ export default function Page({ id }: { id: string }) {
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
     undefined,
   );
-  const [show, setShow] = useState(false);
   const { setEvent, event, setSlots, setParticipants, participants, slots } =
     useEventStore((state) => state);
   useEffect(() => {
@@ -50,14 +49,8 @@ export default function Page({ id }: { id: string }) {
   }, [event]);
   return (
     <DefaultLayout>
-      <Button
-        onClick={() => {
-          setShow(true);
-        }}
-      >
-        Click
-      </Button>
-      {show && <SlotPickerPopup show={show} setShow={setShow} />}
+      
+      
       <div className="grid min-h-0 flex-1 grid-cols-1 gap-4 pt-4 lg:grid-cols-[minmax(0,1fr)_300px] lg:gap-5">
         <section className="grid min-h-0 grid-rows-[auto_minmax(0,1fr)_auto] gap-4 rounded-[24px] border border-white/80 bg-white/55 p-4 shadow-2xl shadow-sky-200/50 backdrop-blur-2xl sm:p-5 lg:p-6">
           <RewardCard />

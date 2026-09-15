@@ -10,6 +10,9 @@ import { ShortSlot, SlotExpand } from "@/features/slot/slot.schema";
 import { useEventStore } from "@/stores/events.store";
 import { toast } from "react-toastify";
 import { EventStatus } from "@/features/event/event.schema";
+import { useUserStore } from "@/stores/user.store";
+import SlotPickerPopup from "../events/SlotPickerPopup";
+import { Button } from "../ui/button";
 const REEL_SIZE = 100;
 const WINNER_INDEX = REEL_SIZE - 8;
 const CARD_WIDTH = 180;
@@ -28,11 +31,13 @@ export default function LuckyReel({ participants }: Props) {
   const { event, setEvent, setWinner, winner } = useEventStore(
     (state) => state,
   );
+  const profile = useUserStore((state) => state.user);
   const [reel, setReel] = useState<SlotExpand[]>(participants);
   const [items, setItems] = useState<SlotExpand[]>([]);
   const [isSpinning, setIsSpinning] = useState(false);
   const [resultShow, setResultShow] = useState(false);
   const [result, setResult] = useState<SlotExpand | null>(null);
+  const [show, setShow] = useState(false);
 
   const createReel = useCallback(() => {
     // Winner được inject vào vị trí cố định.
@@ -134,6 +139,7 @@ export default function LuckyReel({ participants }: Props) {
 
   return (
     <div className="flex w-full flex-col items-center">
+      {show && <SlotPickerPopup show={show} setShow={setShow} />}
       <Reel viewportRef={viewportRef} trackRef={trackRef} items={items} />
 
       {/* =====================================================
@@ -142,7 +148,21 @@ export default function LuckyReel({ participants }: Props) {
 
       <div className="flex h-[80px] items-center justify-center"></div>
       <ResultPopup setShowResult={setResultShow} showResult={resultShow} />
-      <DrawButton isSpinning={isSpinning} onClick={spin} />
+      {profile?.id === event?.creator_id ? (
+        <DrawButton isSpinning={isSpinning} onClick={spin} />
+      ) : (
+        <Button
+          disabled={event?.status !== EventStatus.OPEN}
+          size="lg"
+          variant="default"
+          className="bg-brand! "
+          onClick={() => {
+            setShow(true);
+          }}
+        >
+          Pick your slots
+        </Button>
+      )}
     </div>
   );
 }
