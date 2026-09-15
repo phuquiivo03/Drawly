@@ -43,16 +43,19 @@ class EventRepository {
           event.status != EventStatus.FULL
         )
           throw new Error("Need OPEN or FULL status to update to ClOSE");
+        break;
       }
       case EventStatus.DRAWING: {
         // locked -> drawing
         if (event.status != EventStatus.LOCKED)
           throw new Error("Need CLOSE status to update to DRAWING");
+        break;
       }
       case EventStatus.FULL: {
         // open -> full
         if (event.status != EventStatus.OPEN)
           throw new Error("Need OPEN status to update to FULL");
+        break;
       }
     }
     const { data, error } = await this.supabaseClient
@@ -60,7 +63,9 @@ class EventRepository {
       .update({
         status: newStatus,
       })
-      .eq("id", event.id);
+      .eq("id", event.id)
+      .select()
+      .single();
     if (error) throw error;
     return data;
   }

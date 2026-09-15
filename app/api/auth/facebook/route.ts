@@ -1,6 +1,11 @@
-import { CreateProfile, SocialUser } from "@/features/profile/profile.schema";
+import {
+  CreateProfile,
+  Profile,
+  SocialUser,
+} from "@/features/profile/profile.schema";
 import profileServices from "@/features/profile/profile.service";
 import { createClient } from "@/infrastructure/supabase/server";
+import { AppResponse } from "../../type";
 
 export async function GET() {
   try {
@@ -32,7 +37,12 @@ export async function GET() {
       if (!profileCreateResult) throw new Error("Failed to create new profile");
       return Response.json(profile);
     }
-    return Response.json(profile);
+    const responseData: AppResponse<Profile> = {
+      status: 200,
+      success: true,
+      data: profile,
+    };
+    return Response.json(responseData);
   } catch (e) {
     return Response.json({
       success: false,

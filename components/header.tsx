@@ -9,6 +9,7 @@ import ProfileMenu from "./ui/profileMenu";
 function Header() {
   const [show, setShow] = useState<boolean>(false);
   const user = useUserStore((state) => state.user);
+  console.log("user ", user);
   return (
     <div className="">
       {/* HEADER */}
@@ -35,7 +36,7 @@ function Header() {
         </nav>
 
         <div className="flex items-center gap-3">
-          {user ? (
+          {user && user != null ? (
             <ProfileMenu />
           ) : (
             <>

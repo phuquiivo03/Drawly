@@ -3,57 +3,48 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 
-import type { Reward } from "./types";
 import Reel from "./Reel";
 import { DrawButton } from "../events/DrawButton";
 import ResultPopup from "./ResultPopup";
-
+import { ShortSlot, SlotExpand } from "@/features/slot/slot.schema";
+import { useEventStore } from "@/stores/events.store";
+import { toast } from "react-toastify";
+import { EventStatus } from "@/features/event/event.schema";
+const REEL_SIZE = 100;
+const WINNER_INDEX = REEL_SIZE - 8;
 const CARD_WIDTH = 180;
 const CARD_GAP = 12;
 const ITEM_WIDTH = CARD_WIDTH + CARD_GAP;
 
-const REEL_SIZE = 100;
-const WINNER_INDEX = REEL_SIZE - 8;
-
 const SPIN_DURATION = 6.5;
 
-export type ReelItem = Reward & {
-  reelId: string;
-};
-
 type Props = {
-  rewards: Reward[];
-  winner: Reward;
+  participants: SlotExpand[];
 };
 
-export default function LuckyReel({ rewards, winner }: Props) {
+export default function LuckyReel({ participants }: Props) {
   const viewportRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
-
-  const [items, setItems] = useState<ReelItem[]>([]);
+  const { event, setEvent, setWinner, winner } = useEventStore(
+    (state) => state,
+  );
+  const [reel, setReel] = useState<SlotExpand[]>(participants);
+  const [items, setItems] = useState<SlotExpand[]>([]);
   const [isSpinning, setIsSpinning] = useState(false);
   const [resultShow, setResultShow] = useState(false);
-  const [result, setResult] = useState<Reward | null>(null);
+  const [result, setResult] = useState<SlotExpand | null>(null);
 
   const createReel = useCallback(() => {
-    const reel: ReelItem[] = Array.from({ length: REEL_SIZE }, (_, index) => {
-      const reward = rewards[Math.floor(Math.random() * rewards.length)];
+    // Winner được inject vào vị trí cố định.
+    const reel: SlotExpand[] = Array.from({ length: REEL_SIZE }, (_, index) => {
+      const reward =
+        participants[Math.floor(Math.random() * participants.length)];
 
-      return {
-        ...reward,
-        reelId: `${reward.id}-${index}`,
-      };
+      return reward;
     });
 
-    // Winner được inject vào vị trí cố định.
-    // Trong production winner nên đến từ backend.
-    reel[WINNER_INDEX] = {
-      ...winner,
-      reelId: `${winner.id}-winner`,
-    };
-
     return reel;
-  }, [rewards, winner]);
+  }, [participants]);
 
   useEffect(() => {
     setItems(createReel());
@@ -62,60 +53,83 @@ export default function LuckyReel({ rewards, winner }: Props) {
     if (result == null) return;
     setResultShow(true);
   }, [result]);
-  const spin = () => {
-    if (isSpinning || !viewportRef.current || !trackRef.current) {
+  const spin = async () => {
+    if (isSpinning || !viewportRef.current || !trackRef.current || !event) {
       return;
     }
 
     setIsSpinning(true);
     setResult(null);
 
-    const reel = createReel();
+    try {
+      // 1. Get winner FIRST
+      const res = await fetch(`/api/events/result/${event.id}`);
 
-    setItems(reel);
+      if (!res.ok) {
+        throw new Error("Failed to get event result");
+      }
 
-    requestAnimationFrame(() => {
-      const viewport = viewportRef.current;
-      const track = trackRef.current;
+      const data = await res.json();
 
-      if (!viewport || !track) return;
+      const winnerSlot = data.data as SlotExpand;
 
-      gsap.killTweensOf(track);
+      if (!winnerSlot) {
+        throw new Error("Winner slot not defined");
+      }
 
-      gsap.set(track, {
-        x: 0,
-      });
+      // 2. Save winner
+      setWinner(winnerSlot);
 
-      const viewportWidth = viewport.offsetWidth;
+      // 3. Create reel
+      const newReel = createReel();
 
-      /*
-       * Center của winner trong track.
-       */
-      const winnerCenter = WINNER_INDEX * ITEM_WIDTH + CARD_WIDTH / 2;
+      // 4. Inject winner at fixed position
+      newReel[WINNER_INDEX] = winnerSlot;
 
-      /*
-       * Đưa center của winner vào center viewport.
-       */
-      const targetX = viewportWidth / 2 - winnerCenter;
+      // 5. Render reel
+      setItems(newReel);
 
-      const timeline = gsap.timeline({
-        onComplete: () => {
+      // 6. Wait for React to render the new items
+      requestAnimationFrame(() => {
+        const viewport = viewportRef.current;
+        const track = trackRef.current;
+
+        if (!viewport || !track) {
           setIsSpinning(false);
-          setResult(winner);
-        },
-      });
+          return;
+        }
 
-      /*
-       * Main spin
-       *
-       * Chạy nhanh → giảm tốc mạnh.
-       */
-      timeline.to(track, {
-        x: targetX - Math.floor(Math.random() * 70 * 2 - 70),
-        duration: SPIN_DURATION - 0.7,
-        ease: "power4.out",
+        gsap.killTweensOf(track);
+
+        gsap.set(track, {
+          x: 0,
+        });
+
+        const viewportWidth = viewport.offsetWidth;
+
+        const winnerCenter = WINNER_INDEX * ITEM_WIDTH + CARD_WIDTH / 2;
+
+        const targetX = viewportWidth / 2 - winnerCenter;
+
+        gsap.to(track, {
+          x: targetX,
+          duration: SPIN_DURATION,
+          ease: "power4.out",
+
+          onComplete: () => {
+            setIsSpinning(false);
+            setResult(winnerSlot);
+          },
+        });
       });
-    });
+      // set event status
+      setEvent({ ...event, status: EventStatus.CLOSE });
+    } catch (error) {
+      console.error(error);
+
+      setIsSpinning(false);
+      toast.error("Failed to get event result");
+    }
   };
 
   return (

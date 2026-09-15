@@ -1,11 +1,11 @@
 import { Ref } from "react";
-import { ReelItem } from "./LuckyReel";
-import RewardCard from "./RewardCard";
+import { SlotExpand } from "@/features/slot/slot.schema";
+import ReelCard from "./RewardCard";
 
 type Props = {
   viewportRef: Ref<HTMLDivElement>;
   trackRef: Ref<HTMLDivElement>;
-  items: ReelItem[];
+  items: SlotExpand[];
 };
 function Reel(props: Props) {
   const { viewportRef, trackRef, items } = props;
@@ -38,8 +38,8 @@ function Reel(props: Props) {
                   will-change-transform
                 "
         >
-          {items.map((item) => (
-            <RewardCard key={item.reelId} reward={item} />
+          {items.map((item, index) => (
+            <ReelCard key={index} participant={item} />
           ))}
         </div>
       </div>

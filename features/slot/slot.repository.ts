@@ -1,6 +1,12 @@
 import { createClient } from "@/infrastructure/supabase/client";
 import { SupabaseClient } from "@supabase/supabase-js";
-import { CreateSlot, ShortSlot, Slot, SlotStatus } from "./slot.schema";
+import {
+  CreateSlot,
+  ShortSlot,
+  Slot,
+  SlotExpand,
+  SlotStatus,
+} from "./slot.schema";
 
 class SlotRepository {
   private readonly supabaseClient: SupabaseClient;
@@ -20,7 +26,7 @@ class SlotRepository {
     return data;
   }
 
-  async findManyByEvent(eventId: string): Promise<ShortSlot[] | null> {
+  async findManyByEvent(eventId: string): Promise<SlotExpand[] | null> {
     const { data, error } = await this.supabaseClient
       .from("slots")
       .select("*, profile:profiles(*)")

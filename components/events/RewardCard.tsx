@@ -1,10 +1,31 @@
 "use client";
 import { useEventStore } from "@/stores/events.store";
-import { Gift } from "lucide-react";
+import { Gift, Lock, LockOpen } from "lucide-react";
 import ImageViewer from "../ui/ImageViewer";
+import { Event, EventStatus } from "@/features/event/event.schema";
+import { toast } from "react-toastify";
+import { AppResponse } from "@/app/api/type";
 
 export function RewardCard() {
-  const event = useEventStore((state) => state.event);
+  const { event, setEvent } = useEventStore((state) => state);
+  if (!event) return;
+  const handleUpdateEventStatus = (status: EventStatus) => {
+    fetch(`/api/events/${event.id}`, {
+      method: "PATCH",
+      body: JSON.stringify({ status }),
+    })
+      .then((res) => res.json())
+      .then((data: AppResponse<Event | null>) => {
+        if (data.data) {
+          setEvent({ ...event, status: data.data.status });
+        } else {
+          throw new Error();
+        }
+      })
+      .catch((e) => {
+        toast.error("Failed to update status");
+      });
+  };
   return (
     <div className="flex min-h-0 items-center gap-4 rounded-2xl border border-ink/8 bg-white/65 p-3 sm:gap-5 sm:p-4">
       <div className="grid aspect-square h-20 shrink-0 place-items-center overflow-hidden rounded-xl border border-ink/10 bg-white shadow-sm sm:h-24">
@@ -29,6 +50,37 @@ export function RewardCard() {
       <span className="ml-auto hidden shrink-0 rounded-full bg-emerald-100 px-3 py-1.5 text-xs font-bold text-emerald-700 sm:inline-flex">
         {event?.status}
       </span>
+      <button
+        className="group"
+        onClick={() => {
+          handleUpdateEventStatus(
+            event.status == EventStatus.LOCKED
+              ? EventStatus.OPEN
+              : EventStatus.LOCKED,
+          );
+        }}
+      >
+        {event?.status == EventStatus.OPEN ? (
+          <>
+            <Lock
+              size={16}
+              className="lock hidden group-hover:block text-accent "
+            />
+            <LockOpen
+              size={16}
+              className="text-brand group-hover:hidden shadow-2xs"
+            />
+          </>
+        ) : (
+          <>
+            <Lock size={16} className="lock group-hover:hidden text-accent" />
+            <LockOpen
+              size={16}
+              className="hidden group-hover:block  text-brand"
+            />
+          </>
+        )}
+      </button>
     </div>
   );
 }

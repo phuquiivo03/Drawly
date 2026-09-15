@@ -3,49 +3,13 @@ import confetti from "canvas-confetti";
 import { Button } from "../ui/button";
 import { PartyPopper, Trophy, X } from "lucide-react";
 import { useEffect } from "react";
+import { useEventStore } from "@/stores/events.store";
+import { SlotExpand } from "@/features/slot/slot.schema";
 type Props = {
   showResult: boolean;
   setShowResult: (val: boolean) => void;
 };
-const fireworkBursts = [
-  { left: "12%", top: "18%", color: "#f43f5e", delay: "0s" },
-  { left: "85%", top: "15%", color: "#0ea5e9", delay: "0.25s" },
-  { left: "22%", top: "70%", color: "#facc15", delay: "0.5s" },
-  { left: "78%", top: "68%", color: "#a78bfa", delay: "0.7s" },
-  { left: "50%", top: "8%", color: "#34d399", delay: "0.4s" },
-];
 
-function FireworkBurst({
-  left,
-  top,
-  color,
-  delay,
-}: {
-  left: string;
-  top: string;
-  color: string;
-  delay: string;
-}) {
-  return (
-    <div
-      className="firework-burst pointer-events-none absolute"
-      style={{ left, top, animationDelay: delay }}
-    >
-      {Array.from({ length: 12 }, (_, i) => (
-        <span
-          key={i}
-          className="firework-spark"
-          style={{
-            backgroundColor: color,
-            boxShadow: `0 0 8px ${color}`,
-            transform: `rotate(${i * 30}deg) translateY(0)`,
-          }}
-        />
-      ))}
-      <span className="firework-flash" style={{ backgroundColor: color }} />
-    </div>
-  );
-}
 var count = 200;
 var defaults = {
   origin: { y: 0.7, x: 0.4 },
@@ -53,21 +17,7 @@ var defaults = {
 
 function ResultPopup(props: Props) {
   const { showResult, setShowResult } = props;
-  const handleCelebrate = (
-    particleRatio: number,
-    opts: {
-      spread: number;
-      startVelocity?: number;
-      decay?: number;
-      scalar?: number;
-    },
-  ) => {
-    confetti({
-      ...defaults,
-      ...opts,
-      particleCount: Math.floor(count * particleRatio),
-    });
-  };
+  const { event, winner } = useEventStore((state) => state);
   useEffect(() => {
     if (showResult) {
       handleCelebrate(0.25, {
@@ -94,18 +44,31 @@ function ResultPopup(props: Props) {
       });
     }
   }, [showResult]);
+  const handleCelebrate = (
+    particleRatio: number,
+    opts: {
+      spread: number;
+      startVelocity?: number;
+      decay?: number;
+      scalar?: number;
+    },
+  ) => {
+    confetti({
+      ...defaults,
+      ...opts,
+      particleCount: Math.floor(count * particleRatio),
+    });
+  };
+
   return (
     <div className="">
-      {showResult && (
+      {showResult && event != null && (
         <div
           className="fixed inset-0 z-50 grid place-items-center bg-ink/50 p-4 backdrop-blur-sm"
           role="dialog"
           aria-modal="true"
           aria-label="Winner announcement"
         >
-          {fireworkBursts.map((burst, index) => (
-            <FireworkBurst key={index} {...burst} />
-          ))}
           <div className="result-pop relative w-full max-w-md overflow-hidden rounded-3xl border border-white/70 bg-white/95 p-8 text-center shadow-2xl shadow-brand/30">
             <button
               onClick={() => setShowResult(false)}
@@ -121,12 +84,13 @@ function ResultPopup(props: Props) {
               <PartyPopper className="size-4" /> Congratulations!
             </p>
             <h2 className="mt-2 font-display text-3xl font-bold text-ink">
-              {"winner.user_id"}
+              {(winner as SlotExpand).profile?.display_name || "Undefined"} -{" "}
+              {(winner as SlotExpand).slot_number}
             </h2>
             <div className="mt-5 flex items-center gap-4 rounded-2xl border border-ink/8 bg-white p-4 text-left shadow-sm">
               <div className="grid size-16 shrink-0 place-items-center overflow-hidden rounded-xl border border-ink/10 bg-gradient-to-br from-chart-4/15 to-accent/10">
                 <img
-                  src={"/golden-pistol.png"}
+                  src={event.prizes[0].images[0] || "/break-image.png"}
                   alt="Royal Etch gold pistol reward"
                   className="h-full w-full object-contain p-1 mix-blend-multiply"
                 />
@@ -136,10 +100,10 @@ function ResultPopup(props: Props) {
                   Won the reward
                 </p>
                 <p className="truncate font-display text-lg font-bold text-ink">
-                  Royal Etch
+                  {event.prizes[0].name}
                 </p>
                 <p className="text-xs text-ink/50">
-                  Summer Case · Limited gold finish
+                  {event.prizes[0].description}
                 </p>
               </div>
             </div>

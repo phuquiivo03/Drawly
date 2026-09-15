@@ -23,3 +23,23 @@ export async function GET(req: NextRequest, { params }: RouteContext) {
     });
   }
 }
+
+export async function PATCH(req: NextRequest, { params }: RouteContext) {
+  try {
+    const { id } = await params;
+    const body = await req.json();
+    if (!id || !body.status) throw new Error("Invalid params");
+    const result = await eventService.updateStatus(id, body.status);
+    return Response.json({
+      success: true,
+      status: 200,
+      data: result,
+    });
+  } catch (e) {
+    return Response.json({
+      success: false,
+      status: 400,
+      message: (e as Error).message || "Internal server error",
+    });
+  }
+}

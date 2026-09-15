@@ -1,8 +1,10 @@
-import { Event, EventWithPrize } from "@/features/event/event.schema";
+import { EventWithPrize } from "@/features/event/event.schema";
 import { SlotExpand } from "@/features/slot/slot.schema";
 import { create } from "zustand";
 
 interface EventState {
+  winner: SlotExpand | null;
+  setWinner: (slot: SlotExpand) => void;
   slots: SlotExpand[];
   setSlots: (slots: SlotExpand[]) => void;
   participants: SlotExpand[];
@@ -12,6 +14,12 @@ interface EventState {
 }
 
 export const useEventStore = create<EventState>((set) => ({
+  winner: null,
+  setWinner: (winner) => {
+    set({
+      winner,
+    });
+  },
   slots: [],
   setSlots: (slots) => {
     set({
