@@ -6,6 +6,7 @@ import { useState } from "react";
 import SigninOption from "./ui/signinOptions";
 import ProfileMenu from "./ui/profileMenu";
 import Link from "next/link";
+import { Film } from "lucide-react";
 const pages = [
   {
     title: "Events",
@@ -24,8 +25,8 @@ function Header() {
       {/* HEADER */}
       <header className="relative z-20 flex items-center justify-between px-6 py-5 md:px-10 md:pt-7">
         <Link href={"/"} className="flex items-center gap-3">
-          <div className="grid size-11 place-items-center rounded-2xl bg-gradient-to-br from-brand to-accent text-white shadow-lg shadow-brand/30">
-            <span className="font-display text-lg font-bold">L</span>
+          <div className="grid size-11 place-items-center rounded-2xl  text-white shadow-lg shadow-brand/30">
+            <Film className="text-brand rotate-90" size={32} />
           </div>
           <div className="leading-tight">
             <p className="font-display text-lg font-bold tracking-tight">
