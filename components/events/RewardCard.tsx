@@ -6,11 +6,13 @@ import { Event, EventStatus } from "@/features/event/event.schema";
 import { toast } from "react-toastify";
 import { AppResponse } from "@/app/api/type";
 import { useUserStore } from "@/stores/user.store";
+import LoadingSkeleton from "../ui/loadingSkeleton";
+import { RewardCardLoading } from "./RewardCardLoading";
 
 export function RewardCard() {
   const { event, setEvent } = useEventStore((state) => state);
   const user = useUserStore((state) => state.user);
-  if (!event) return;
+  if (!event) return <RewardCardLoading />;
   const classes = user
     ? event?.creator_id === user.id && event.status != EventStatus.CLOSE
       ? "group"

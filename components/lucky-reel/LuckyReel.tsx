@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Suspense,
   useCallback,
   useEffect,
   useLayoutEffect,
@@ -47,7 +48,6 @@ export default function LuckyReel({ participants }: Props) {
   const createReel = useCallback(() => {
     // Winner được inject vào vị trí cố định.
     const reel: SlotExpand[] = Array.from({ length: REEL_SIZE }, (_, index) => {
-      console.log("create reel ", participants);
       const reward =
         participants[Math.floor(Math.random() * participants.length)];
 
@@ -145,7 +145,15 @@ export default function LuckyReel({ participants }: Props) {
     <div className="flex w-full flex-col items-center">
       {}
       {show && <SlotPickerPopup show={show} setShow={setShow} />}
-      <Reel viewportRef={viewportRef} trackRef={trackRef} items={items} />
+      <Suspense
+        fallback={
+          <div className="flex justify-center items-center min-h-[300px] w-full">
+            <span className="text-2xl">Loading...</span>
+          </div>
+        }
+      >
+        <Reel viewportRef={viewportRef} trackRef={trackRef} items={items} />
+      </Suspense>
 
       {/* =====================================================
           RESULT

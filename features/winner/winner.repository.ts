@@ -22,7 +22,7 @@ class WinnerRepository {
   async findMany(page: number, limit: number): Promise<Winner[] | null> {
     const { data, error } = await this.supabaseClient
       .from("winners")
-      .select("*,user:profiles(*),event:events(*)")
+      .select("*,user:profiles(*),event:events(*),prize:prizes(*)")
       .range((page - 1) * limit, page * limit);
     if (error) {
       throw error;

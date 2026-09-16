@@ -6,6 +6,7 @@ type Props = {
   onChange: (val: string) => void;
   className?: string;
   id: string;
+  placeholder?: string;
   type?: "number" | "string" | "datetime-local";
 };
 const inputClass =
@@ -25,7 +26,7 @@ function Input(props: PropsWithChildren<Props>) {
         id={props.id}
         value={props.value}
         onChange={(e) => props.onChange(e.target.value)}
-        placeholder="Summer Case Giveaway"
+        placeholder={props.placeholder || "Summer Case Giveaway"}
         maxLength={80}
         className={`${inputClass} ${props.className}`}
       />

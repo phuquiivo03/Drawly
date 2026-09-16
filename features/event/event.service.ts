@@ -40,13 +40,16 @@ const getEventWiner = async (eventId: string): Promise<SlotExpand> => {
     participants.length,
   );
   const winner = participants[winnerIndex];
-  // // update event status
-  // await eventRepository.updateStatus(event, EventStatus.CLOSE);
-  // // save winner
-  // await winnerServices.create({
-  //   user: winner.user_id as string,
-  //   event: winner.event_id,
-  // });
+  const prize = await prizeService.findByEventId(event.id);
+  if (!prize) throw new Error("Prize not found");
+  // update event status
+  await eventRepository.updateStatus(event, EventStatus.CLOSE);
+  // save winner
+  await winnerServices.create({
+    user: winner.user_id as string,
+    event: winner.event_id,
+    prize: prize[0],
+  });
   return winner;
 };
 
