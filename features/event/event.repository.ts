@@ -10,9 +10,20 @@ class EventRepository {
   async findById(id: string): Promise<Event | null> {
     const { data, error } = await this.supabaseClient
       .from("events")
-      .select("*")
+      .select("id,status,server_seed_hash,lock_at,creator_id,created_at")
       .eq("id", id)
       .single();
+    if (error) {
+      throw error;
+    }
+    return data;
+  }
+
+  async findMany(id: string): Promise<Event[] | null> {
+    const { data, error } = await this.supabaseClient
+      .from("events")
+      .select("id,status,server_seed_hash,lock_at,creator_id,created_at")
+      .eq("creator_id", id);
     if (error) {
       throw error;
     }
@@ -23,7 +34,7 @@ class EventRepository {
     const { data, error } = await this.supabaseClient
       .from("events")
       .insert({ ...event, status: EventStatus.OPEN })
-      .select();
+      .select("id,status,server_seed_hash,lock_at,creator_id,created_at");
     if (error) {
       throw error;
     }
@@ -64,7 +75,7 @@ class EventRepository {
         status: newStatus,
       })
       .eq("id", event.id)
-      .select()
+      .select("id,status,server_seed_hash,lock_at,creator_id,created_at")
       .single();
     if (error) throw error;
     return data;
@@ -73,7 +84,7 @@ class EventRepository {
   async findManyByArray(ids: string[]): Promise<Event[] | null> {
     const { data, error } = await this.supabaseClient
       .from("events")
-      .select("*")
+      .select("id,status,server_seed_hash,lock_at,creator_id,created_at")
       .in("id", ids);
     if (error) throw error;
     return data;

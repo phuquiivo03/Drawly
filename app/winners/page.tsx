@@ -9,19 +9,36 @@ import Input from "@/components/ui/input";
 import { Profile } from "@/features/profile/profile.schema";
 import { Prize } from "@/features/prize/prize.schema";
 import Image from "next/image";
+import { useDebounce } from "@/lib/hooks";
 
 function Page() {
   const [winners, setWinners] = useState<Winner[]>();
+  const [filtered, setFiltered] = useState<Winner[]>();
+
   const [query, setQuery] = useState<string>("");
+  const debouncedQuery = useDebounce(query, 1000);
   useEffect(() => {
     fetch("/api/winners")
       .then((res) => res.json())
       .then((data: AppResponse<Winner[] | null>) => {
         if (data.data) {
           setWinners(data.data);
+          setFiltered(data.data);
         }
       });
   }, []);
+  useEffect(() => {
+    const filteredData = winners?.filter(
+      (winner) =>
+        (winner.prize as Prize).name
+          .toLowerCase()
+          .includes(debouncedQuery.toLowerCase()) ||
+        (winner.user as Profile).display_name
+          .toLowerCase()
+          .includes(debouncedQuery.toLowerCase()),
+    );
+    setFiltered(filteredData);
+  }, [debouncedQuery]);
   return (
     <DefaultLayout>
       {" "}
@@ -53,8 +70,8 @@ function Page() {
           </div>
 
           <ul className="mt-4 space-y-2">
-            {winners ? (
-              winners.map((winner) => (
+            {filtered ? (
+              filtered.map((winner) => (
                 <li
                   key={winner.id}
                   className="flex flex-wrap items-center gap-3 rounded-2xl border border-ink/8 bg-white/70 p-3 transition hover:border-brand/30 hover:bg-white"

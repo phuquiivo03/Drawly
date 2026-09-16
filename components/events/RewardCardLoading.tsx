@@ -27,9 +27,9 @@ export function RewardCardLoading() {
           <LoadingSkeleton className="">...</LoadingSkeleton>
         </h1>
 
-        <p className="mt-1 line-clamp-2 text-sm text-ink/55">
+        <div className="mt-1 line-clamp-2 text-sm text-ink/55">
           <LoadingSkeleton className="">...</LoadingSkeleton>
-        </p>
+        </div>
       </div>
 
       <span className="ml-auto hidden shrink-0 rounded-full bg-emerald-100 px-3 py-1.5 text-xs font-bold text-emerald-700 sm:inline-flex">

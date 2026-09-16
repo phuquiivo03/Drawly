@@ -3,9 +3,8 @@ import { requireAuth } from "@/lib/auth";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
-  const { user, response } = await requireAuth();
-
-  if (!user) {
+  const { profile, response } = await requireAuth();
+  if (!profile) {
     if (response) return response;
     throw new Error("Unauthen");
   }

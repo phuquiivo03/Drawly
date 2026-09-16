@@ -42,7 +42,11 @@ type FormErrors = Partial<
   >
 >;
 
-export default function CreateEventForm() {
+export default function CreateEventForm({
+  setOpen,
+}: {
+  setOpen: (val: boolean) => void;
+}) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
@@ -120,7 +124,6 @@ export default function CreateEventForm() {
       if (!urls) return;
 
       const eventData: CreateEventRequest = {
-        creator_id: "123e4567-e89b-12d3-a456-426614174000",
         max_slot: maxSlots,
         lock_at: lockTime,
         prizes: [
@@ -195,7 +198,7 @@ export default function CreateEventForm() {
         <div className="mt-6 space-y-5">
           <Input
             id={"event-name"}
-            label={<>Event name</>}
+            label={<>Prize name</>}
             value={name}
             onChange={(val) => {
               if (errors.name) setErrors({ ...errors, name: undefined });
@@ -288,7 +291,7 @@ export default function CreateEventForm() {
             <div className="grid grid-cols-4 gap-3">
               {images.map((image, index) => (
                 <UploadedImage
-                key={index}
+                  key={index}
                   url={image.url}
                   name={image.name}
                   removeImage={removeImage}
@@ -311,10 +314,17 @@ export default function CreateEventForm() {
         </div>
 
         <div className="mt-8 flex items-center justify-end gap-3">
-          <Button asChild variant="ghost" className="rounded-xl text-ink/60">
-            <Link href="/events">
+          <Button
+            asChild
+            variant="ghost"
+            className="rounded-xl text-ink/60"
+            onClick={() => {
+              setOpen(false);
+            }}
+          >
+            <span>
               <X /> Cancel
-            </Link>
+            </span>
           </Button>
           <Button
             type="submit"

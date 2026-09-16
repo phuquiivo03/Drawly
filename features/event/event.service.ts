@@ -21,6 +21,23 @@ const findById = async (id: string) => {
   return { ...event, prizes: eventPrizes };
 };
 
+const findManyUserEvents = async (id: string) => {
+  const events = await eventRepository.findMany(id);
+  if (!events) throw new Error("Fail to find event");
+  const eventPrizesPromise = Promise.all(
+    events?.map((event) => {
+      return prizeService.findByEventId(event.id);
+    }),
+  );
+  const result = await eventPrizesPromise;
+  return result.map((prize, index) => {
+    return {
+      prizes: prize,
+      ...events[index],
+    };
+  });
+};
+
 const getEventWiner = async (eventId: string): Promise<SlotExpand> => {
   // hash (seed + eventId + (participants -> normalize -> hash)) % length
   const event = await eventRepository.findById(eventId);
@@ -34,7 +51,7 @@ const getEventWiner = async (eventId: string): Promise<SlotExpand> => {
   const participantsPayload = createParticipantsPayload(participants);
   const participantsHash = hash(participantsPayload);
   const winnerIndex = getWinnerIndex(
-    event.server_seed,
+    event.server_seed as string,
     eventId,
     participantsHash,
     participants.length,
@@ -48,7 +65,7 @@ const getEventWiner = async (eventId: string): Promise<SlotExpand> => {
   await winnerServices.create({
     user: winner.user_id as string,
     event: winner.event_id,
-    prize: prize[0],
+    prize: prize[0].id,
   });
   return winner;
 };
@@ -75,5 +92,6 @@ const eventServices = {
   getEventWiner,
   updateStatus,
   findManyByArray,
+  findManyUserEvents,
 };
 export default eventServices;

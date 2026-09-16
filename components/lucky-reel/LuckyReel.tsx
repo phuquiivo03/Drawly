@@ -43,7 +43,6 @@ export default function LuckyReel({ participants }: Props) {
   const [isSpinning, setIsSpinning] = useState(false);
   const [resultShow, setResultShow] = useState(false);
   const [result, setResult] = useState<SlotExpand | null>(null);
-  const [show, setShow] = useState(false);
   const hasInitializedRef = useRef(false);
   const createReel = useCallback(() => {
     // Winner được inject vào vị trí cố định.
@@ -144,7 +143,7 @@ export default function LuckyReel({ participants }: Props) {
   return (
     <div className="flex w-full flex-col items-center">
       {}
-      {show && <SlotPickerPopup show={show} setShow={setShow} />}
+
       <Suspense
         fallback={
           <div className="flex justify-center items-center min-h-[300px] w-full">
@@ -164,17 +163,7 @@ export default function LuckyReel({ participants }: Props) {
       {profile?.id === event?.creator_id ? (
         <DrawButton isSpinning={isSpinning} onClick={spin} />
       ) : (
-        <Button
-          disabled={event?.status !== EventStatus.OPEN}
-          size="lg"
-          variant="default"
-          className="bg-brand! "
-          onClick={() => {
-            setShow(true);
-          }}
-        >
-          Pick your slots
-        </Button>
+        <></>
       )}
     </div>
   );

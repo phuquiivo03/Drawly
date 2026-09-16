@@ -12,7 +12,7 @@ export enum EventStatus {
 export const eventChema = z.object({
   id: z.string(),
   status: z.enum(EventStatus),
-  server_seed: z.string(),
+  server_seed: z.string().optional(),
   server_seed_hash: z.string(),
   lock_at: z.string().optional(),
   creator_id: z.string(),
@@ -29,7 +29,6 @@ export const createEventSchema = z.object({
 export const createEventRequestSchema = z.object({
   max_slot: z.string().optional(),
   lock_at: z.string().optional(),
-  creator_id: z.string(),
   prizes: z.array(createPrizeRequestSchema),
 });
 

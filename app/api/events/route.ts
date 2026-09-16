@@ -2,9 +2,10 @@ import {
   CreateEvent,
   createEventRequestSchema,
 } from "@/features/event/event.schema";
-import { createEvent } from "@/features/event/event.service";
+import eventServices, { createEvent } from "@/features/event/event.service";
 import serviceService from "@/features/prize/prize.service";
 import slotServices from "@/features/slot/slot.service";
+import { requireAuth } from "@/lib/auth";
 import { generateServerSeed, hash } from "@/lib/crypto.helper";
 import { createSlotsData } from "@/lib/helper";
 import { NextRequest } from "next/server";
@@ -12,6 +13,8 @@ import { NextRequest } from "next/server";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
+    const { profile, response } = await requireAuth();
+    if (!profile) return response;
     const parseResult = createEventRequestSchema.safeParse(body);
     if (parseResult.error) throw new Error(parseResult.error.message);
 
@@ -22,7 +25,7 @@ export async function POST(req: NextRequest) {
       lock_at: parseResult.data.lock_at,
       server_seed: serverSeed,
       server_seed_hash: hashed,
-      creator_id: parseResult.data.creator_id,
+      creator_id: profile.id,
     };
     const createResult = await createEvent(eventData);
     if (!createResult) throw new Error("create event fail");
@@ -54,6 +57,27 @@ export async function POST(req: NextRequest) {
       message:
         JSON.parse(JSON.stringify((e as Error).message)) ||
         "Fail to create event!!",
+    });
+  }
+}
+
+export async function GET() {
+  try {
+    const { response, profile } = await requireAuth();
+    if (!profile) return response;
+    console.log(profile);
+    const winners = await eventServices.findManyUserEvents(profile?.id);
+    if (!winners) throw new Error("Failed to get winners");
+    return Response.json({
+      success: true,
+      status: 200,
+      data: winners,
+    });
+  } catch (e) {
+    return Response.json({
+      success: false,
+      status: 400,
+      message: (e as Error).message || "Internal server error",
     });
   }
 }
