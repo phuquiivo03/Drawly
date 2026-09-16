@@ -35,7 +35,11 @@ export async function GET() {
       const profileCreateResult =
         await profileServices.create(profileCreateData);
       if (!profileCreateResult) throw new Error("Failed to create new profile");
-      return Response.json(profile);
+      return Response.json({
+        status: 200,
+        success: true,
+        data: profileCreateResult,
+      });
     }
     const responseData: AppResponse<Profile> = {
       status: 200,
