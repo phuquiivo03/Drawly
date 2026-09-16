@@ -10,13 +10,15 @@ import { generateServerSeed, hash } from "@/lib/crypto.helper";
 import { createSlotsData } from "@/lib/helper";
 import { NextRequest } from "next/server";
 
-export async function POST(req: NextRequest) {
+export async function POST(req: NextRequest): Promise<Response> {
   try {
     const body = await req.json();
-    const { profile, response } = await requireAuth();
-    if (!profile) return response;
+    const { profile } = await requireAuth();
+    if (!profile) throw new Error("Unauthorized");
     const parseResult = createEventRequestSchema.safeParse(body);
-    if (parseResult.error) throw new Error(parseResult.error.message);
+    if (!parseResult.success) {
+      throw new Error(parseResult.error.message);
+    }
 
     // generate seed -> hash
     const serverSeed = generateServerSeed();
@@ -49,6 +51,8 @@ export async function POST(req: NextRequest) {
         status: 200,
         data: createResult,
       });
+    } else {
+      throw new Error("Fail to create Sltos!");
     }
   } catch (e) {
     return Response.json({
@@ -61,11 +65,10 @@ export async function POST(req: NextRequest) {
   }
 }
 
-export async function GET() {
+export async function GET(): Promise<Response> {
   try {
-    const { response, profile } = await requireAuth();
-    if (!profile) return response;
-    console.log(profile);
+    const { profile } = await requireAuth();
+    if (!profile) throw new Error("Unauthorized");
     const winners = await eventServices.findManyUserEvents(profile?.id);
     if (!winners) throw new Error("Failed to get winners");
     return Response.json({
