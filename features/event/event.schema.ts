@@ -1,5 +1,6 @@
 import z from "zod";
 import { createPrizeRequestSchema, Prize } from "../prize/prize.schema";
+import { SlotExpand } from "../slot/slot.schema";
 export enum EventStatus {
   OPEN = "open",
   FULL = "full",
@@ -36,3 +37,4 @@ export type Event = z.infer<typeof eventChema>;
 export type CreateEvent = z.infer<typeof createEventSchema>;
 export type EventWithPrize = Event & { prizes: Prize[] };
 export type CreateEventRequest = z.infer<typeof createEventRequestSchema>;
+export type EventWinner = Event & SlotExpand;

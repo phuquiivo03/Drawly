@@ -1,3 +1,4 @@
+import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 import Stat from "./stat";
 import StatusBadge from "./statusBadge";
@@ -18,6 +19,7 @@ const stats = [
 ];
 
 function HomeHero() {
+  const route = useRouter();
   return (
     <div className="col-span-12 md:col-span-6">
       <StatusBadge />
@@ -36,6 +38,9 @@ function HomeHero() {
       <div className="mt-8 flex flex-wrap items-center gap-4">
         {/* NEW EVENT BUTTON */}
         <Button
+          onClick={() => {
+            route.push("/events");
+          }}
           size="xl"
           className="group inline-flex cursor-pointer items-center gap-2.5 rounded-2xl bg-accent! px-7 py-4 text-base font-bold text-white shadow-xl shadow-accent/30 transition  hover:shadow-2xl"
         >

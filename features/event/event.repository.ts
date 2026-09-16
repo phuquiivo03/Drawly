@@ -1,6 +1,6 @@
 import { createClient } from "@/infrastructure/supabase/client";
 import { SupabaseClient } from "@supabase/supabase-js";
-import { CreateEvent, Event, EventStatus } from "./event.schema";
+import { CreateEvent, Event, EventStatus, EventWinner } from "./event.schema";
 
 class EventRepository {
   private readonly supabaseClient: SupabaseClient;
@@ -66,6 +66,15 @@ class EventRepository {
       .eq("id", event.id)
       .select()
       .single();
+    if (error) throw error;
+    return data;
+  }
+
+  async findManyByArray(ids: string[]): Promise<Event[] | null> {
+    const { data, error } = await this.supabaseClient
+      .from("events")
+      .select("*")
+      .in("id", ids);
     if (error) throw error;
     return data;
   }

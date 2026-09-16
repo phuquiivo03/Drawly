@@ -39,7 +39,7 @@ function Reel(props: Props) {
                 "
         >
           {items.map((item, index) => (
-            <ReelCard key={index} participant={item} />
+            <ReelCard key={index} index={index} participant={item} />
           ))}
         </div>
       </div>

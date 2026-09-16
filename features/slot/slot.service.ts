@@ -1,4 +1,4 @@
-import { CreateSlot, Slot, SlotStatus } from "./slot.schema";
+import { CreateSlot, Slot, SlotExpand, SlotStatus } from "./slot.schema";
 import slotRepository from "./slot.repository";
 const createSlot = async (slotData: CreateSlot): Promise<Slot | null> => {
   try {
@@ -42,10 +42,21 @@ const checkAndUpdateSlot = async (
   return result;
 };
 
+const getWinners = async (
+  page: number,
+  limit: number,
+): Promise<SlotExpand[] | null> => {
+  const slots = await slotRepository.findManyWinner(page, limit);
+
+  return slots;
+};
+
 const slotServices = {
   createSlot,
   createManySlots,
   findManySlots,
   checkAndUpdateSlot,
+  getWinners,
 };
+
 export default slotServices;

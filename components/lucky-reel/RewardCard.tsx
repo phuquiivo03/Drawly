@@ -6,6 +6,7 @@ import Image from "next/image";
 
 type Props = {
   participant: SlotExpand;
+  index: number
 };
 
 const rarityStyles = [
@@ -31,7 +32,7 @@ const rarityStyles = [
   },
 ] as const;
 
-export default function ReelCard({ participant }: Props) {
+export default function ReelCard({ participant, index }: Props) {
   const style = rarityStyles[Math.floor(Math.random() * 4)];
   if (!participant) return;
   return (
@@ -48,6 +49,7 @@ export default function ReelCard({ participant }: Props) {
         ${style.border}
       `}
     >
+      {index}
       {/* ===================================================
           GLOW
       ==================================================== */}

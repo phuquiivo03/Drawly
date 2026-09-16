@@ -5,16 +5,25 @@ import Image from "next/image";
 import { useState } from "react";
 import SigninOption from "./ui/signinOptions";
 import ProfileMenu from "./ui/profileMenu";
-
+import Link from "next/link";
+const pages = [
+  {
+    title: "Events",
+    url: "/events",
+  },
+  {
+    title: "Winners",
+    url: "/winners",
+  },
+];
 function Header() {
   const [show, setShow] = useState<boolean>(false);
   const user = useUserStore((state) => state.user);
-  console.log("user ", user);
   return (
     <div className="">
       {/* HEADER */}
       <header className="relative z-20 flex items-center justify-between px-6 py-5 md:px-10 md:pt-7">
-        <div className="flex items-center gap-3">
+        <Link href={"/"} className="flex items-center gap-3">
           <div className="grid size-11 place-items-center rounded-2xl bg-gradient-to-br from-brand to-accent text-white shadow-lg shadow-brand/30">
             <span className="font-display text-lg font-bold">L</span>
           </div>
@@ -26,13 +35,14 @@ function Header() {
               Spin the draw, share the win
             </p>
           </div>
-        </div>
+        </Link>
 
         <nav className="hidden items-center gap-9 text-sm font-medium text-ink/70 lg:flex">
-          <span className="cursor-default">Events</span>
-          <span className="cursor-default">Reel</span>
-          <span className="cursor-default">Winners</span>
-          <span className="cursor-default">Pricing</span>
+          {pages.map((page, index) => (
+            <Link key={index} href={page.url}>
+              {page.title}
+            </Link>
+          ))}
         </nav>
 
         <div className="flex items-center gap-3">

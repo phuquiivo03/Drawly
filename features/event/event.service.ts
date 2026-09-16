@@ -1,10 +1,11 @@
-import { CreateEvent, Event, EventStatus } from "./event.schema";
+import { CreateEvent, Event, EventStatus, EventWinner } from "./event.schema";
 import eventRepository from "./event.repository";
 import { ShortSlot, SlotExpand } from "../slot/slot.schema";
 import slotRepository from "../slot/slot.repository";
 import { createParticipantsPayload } from "@/lib/helper";
 import { getWinnerIndex, hash } from "@/lib/crypto.helper";
 import prizeService from "../prize/prize.service";
+import winnerServices from "../winner/winner.service";
 export const createEvent = async (eventData: CreateEvent) => {
   try {
     return await eventRepository.create(eventData);
@@ -39,8 +40,13 @@ const getEventWiner = async (eventId: string): Promise<SlotExpand> => {
     participants.length,
   );
   const winner = participants[winnerIndex];
-  // update event status
-  await eventRepository.updateStatus(event, EventStatus.CLOSE);
+  // // update event status
+  // await eventRepository.updateStatus(event, EventStatus.CLOSE);
+  // // save winner
+  // await winnerServices.create({
+  //   user: winner.user_id as string,
+  //   event: winner.event_id,
+  // });
   return winner;
 };
 
@@ -54,10 +60,17 @@ const updateStatus = async (
   if (!status) throw new Error("Failed to update event status");
   return result;
 };
+
+const findManyByArray = async (ids: string[]): Promise<Event[] | null> => {
+  const events = await eventRepository.findManyByArray(ids);
+  return events;
+};
+
 const eventServices = {
   createEvent,
   findById,
   getEventWiner,
   updateStatus,
+  findManyByArray,
 };
 export default eventServices;

@@ -72,6 +72,19 @@ class SlotRepository {
     }
     return data;
   }
+
+  async findManyWinner(
+    page: number,
+    limit: number,
+  ): Promise<SlotExpand[] | null> {
+    const { data, error } = await this.supabaseClient
+      .from("slots")
+      .select("*, profile:profiles(*)")
+      .not("user_id", "is", null)
+      .range(limit * page - limit, limit * page - 1);
+    if (error) throw new Error("Fail to find participant");
+    return data;
+  }
 }
 const slotRepository = new SlotRepository();
 export default slotRepository;
