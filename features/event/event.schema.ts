@@ -14,6 +14,7 @@ export const eventChema = z.object({
   status: z.enum(EventStatus),
   server_seed: z.string().optional(),
   server_seed_hash: z.string(),
+  slots_per_user: z.number().positive(),
   lock_at: z.string().optional(),
   creator_id: z.string(),
   created_at: z.date(),
@@ -22,6 +23,7 @@ export const eventChema = z.object({
 export const createEventSchema = z.object({
   server_seed: z.string(),
   server_seed_hash: z.string(),
+  slots_per_user: z.number().optional(),
   lock_at: z.string().optional(),
   creator_id: z.string(),
 });
@@ -29,6 +31,7 @@ export const createEventSchema = z.object({
 export const createEventRequestSchema = z.object({
   max_slot: z.string().optional(),
   lock_at: z.string().optional(),
+  slots_per_user: z.number().optional(),
   prizes: z.array(createPrizeRequestSchema),
 });
 

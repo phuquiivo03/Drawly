@@ -9,8 +9,9 @@ import { AppResponse } from "@/app/api/type";
 
 type Props = {
   item: Slot;
+  disable: boolean;
 };
-function SlotItem({ item }: Props) {
+function SlotItem({ item, disable }: Props) {
   const [loading, setLoading] = useState(false);
   const { slots, setSlots, setParticipants } = useEventStore((state) => state);
   const profile = useUserStore((state) => state.user);
@@ -48,12 +49,12 @@ function SlotItem({ item }: Props) {
               background: "#78ffbb"!,
               color: "#007a55"!,
             }
-          : {}
+          : { background: "var(--color-brand)"! }
       }
       onClick={() => {
         handleClick(item.id);
       }}
-      disabled={!!item.user_id}
+      disabled={disable || !!item.user_id}
       variant="default"
     >
       {!loading ? (

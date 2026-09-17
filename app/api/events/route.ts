@@ -28,6 +28,7 @@ export async function POST(req: NextRequest): Promise<Response> {
       server_seed: serverSeed,
       server_seed_hash: hashed,
       creator_id: profile.id,
+      slots_per_user: parseResult.data.slots_per_user,
     };
     const createResult = await createEvent(eventData);
     if (!createResult) throw new Error("create event fail");

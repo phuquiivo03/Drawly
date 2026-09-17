@@ -11,7 +11,8 @@ interface ParticipantsProps {
 }
 
 export function Participants({ participants, winner }: ParticipantsProps) {
-  const event = useEventStore((state) => state.event);
+  const { event, slots } = useEventStore((state) => state);
+  console.log("event: ", event);
   return (
     <aside className="flex min-h-0 flex-col max-h-[80vh] rounded-[24px] border border-white/80 bg-white/60 p-4 shadow-2xl shadow-sky-200/45 backdrop-blur-2xl sm:p-5">
       <div className="flex items-start justify-between border-b border-ink/8 pb-4">
@@ -26,7 +27,7 @@ export function Participants({ participants, winner }: ParticipantsProps) {
 
         <div className="">
           <span className="rounded-full bg-brand/10 px-2.5 py-1 text-xs font-bold text-brand">
-            10 / 12
+            {participants.length || 0} / {slots.length || 0}
           </span>
           <div className="flex gap-2 items-center mt-1">
             <UserPlus className="size-4 text-brand" />

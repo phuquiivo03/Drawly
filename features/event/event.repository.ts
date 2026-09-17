@@ -10,7 +10,9 @@ class EventRepository {
   async findById(id: string): Promise<Event | null> {
     const { data, error } = await this.supabaseClient
       .from("events")
-      .select("id,status,server_seed_hash,lock_at,creator_id,created_at")
+      .select(
+        "id,status,server_seed_hash,lock_at, slots_per_user,creator_id,created_at",
+      )
       .eq("id", id)
       .single();
     if (error) {
@@ -22,7 +24,9 @@ class EventRepository {
   async findMany(id: string): Promise<Event[] | null> {
     const { data, error } = await this.supabaseClient
       .from("events")
-      .select("id,status,server_seed_hash,lock_at,creator_id,created_at")
+      .select(
+        "id,status,server_seed_hash,lock_at,creator_id,slots_per_user,created_at",
+      )
       .eq("creator_id", id);
     if (error) {
       throw error;
@@ -31,10 +35,13 @@ class EventRepository {
   }
 
   async create(event: CreateEvent): Promise<Event | null> {
+    console.log("create data", event);
     const { data, error } = await this.supabaseClient
       .from("events")
       .insert({ ...event, status: EventStatus.OPEN })
-      .select("id,status,server_seed_hash,lock_at,creator_id,created_at");
+      .select(
+        "id,status,server_seed_hash,lock_at,creator_id,slots_per_user,created_at",
+      );
     if (error) {
       throw error;
     }
@@ -75,7 +82,9 @@ class EventRepository {
         status: newStatus,
       })
       .eq("id", event.id)
-      .select("id,status,server_seed_hash,lock_at,creator_id,created_at")
+      .select(
+        "id,status,server_seed_hash,lock_at,creator_id,slots_per_user,created_at",
+      )
       .single();
     if (error) throw error;
     return data;
@@ -84,7 +93,9 @@ class EventRepository {
   async findManyByArray(ids: string[]): Promise<Event[] | null> {
     const { data, error } = await this.supabaseClient
       .from("events")
-      .select("id,status,server_seed_hash,lock_at,creator_id,created_at")
+      .select(
+        "id,status,server_seed_hash,lock_at,creator_id,slots_per_user,created_at",
+      )
       .in("id", ids);
     if (error) throw error;
     return data;

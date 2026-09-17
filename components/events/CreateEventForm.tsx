@@ -33,11 +33,21 @@ const eventSchema = z.object({
     .string()
     .min(0, "Pick when the event locks and starts the draw")
     .optional(),
+  slotsPerUser: z
+    .number()
+    .int()
+    .positive("Slot per user shoule be > 0")
+    .optional(),
 });
 
 type FormErrors = Partial<
   Record<
-    "name" | "description" | "maxSlots" | "lockTime" | "images",
+    | "name"
+    | "description"
+    | "maxSlots"
+    | "lockTime"
+    | "images"
+    | "slotsPerUser",
     string | undefined
   >
 >;
@@ -53,6 +63,7 @@ export default function CreateEventForm({
   const [description, setDescription] = useState("");
   const [maxSlots, setMaxSlots] = useState("12");
   const [lockTime, setLockTime] = useState("");
+  const [slotsPerUser, setSlotsPerUser] = useState(1);
   const [images, setImages] = useState<
     { url: string; name: string; file: File }[]
   >([]);
@@ -133,6 +144,7 @@ export default function CreateEventForm({
             images: urls.urls,
           },
         ],
+        slots_per_user: slotsPerUser,
       };
       const response = await fetch("/api/events", {
         method: "POST",
@@ -255,7 +267,24 @@ export default function CreateEventForm({
             >
               {errors.maxSlots}
             </Input>
-
+            <Input
+              type="number"
+              id="event-slots"
+              label={
+                <>
+                  <Users className="size-3.5" /> Slots per User
+                </>
+              }
+              value={`${slotsPerUser}`}
+              onChange={(val) => {
+                if (errors.slotsPerUser)
+                  setErrors({ ...errors, slotsPerUser: undefined });
+                setSlotsPerUser(parseInt(val as string));
+              }}
+              className=""
+            >
+              {errors.slotsPerUser}
+            </Input>
             <Input
               type="datetime-local"
               id="event-lock-time"

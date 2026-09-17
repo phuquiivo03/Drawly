@@ -1,7 +1,6 @@
 "use client";
 import { Participants } from "@/components/events/Participants";
 import { RewardCard } from "@/components/events/RewardCard";
-import SlotPickerPopup from "@/components/events/SlotPickerPopup";
 import DefaultLayout from "@/components/layout/default";
 import Reel from "@/components/lucky-reel/page";
 import { Button } from "@/components/ui/button";
