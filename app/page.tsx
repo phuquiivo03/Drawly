@@ -4,54 +4,81 @@ import HomeHero from "@/components/home/hero";
 import DefaultLayout from "@/components/layout/default";
 import Image from "next/image";
 import { useEffect } from "react";
+enum Rarities {
+  cyan = "reel-rare-cyan",
+  red = "reel-rare-red",
+  violet = "reel-rare-violet",
+  gold = "reel-rare-gold",
+}
+const textColors: Record<Rarities, string> = {
+  [Rarities.cyan]: "text-brand",
+  [Rarities.red]: "text-accent",
+  [Rarities.violet]: "text-chart-5",
+  [Rarities.gold]: "text-chart-4",
+};
+
+const borders: Record<Rarities, string> = {
+  [Rarities.cyan]: "border-brand",
+  [Rarities.red]: "border-accent",
+  [Rarities.violet]: "border-chart-5",
+  [Rarities.gold]: "border-chart-4",
+};
 const reelItems = [
   {
+    avatar: "/av1.png",
+    slot_number: "3",
     name: "Neon Circuit",
     type: "Rifle",
     image: "/golden-pistol.png",
-    rarity: "reel-rare-cyan",
+    rarity: Rarities.cyan,
   },
   {
+    avatar: "/av3.png",
+    slot_number: "5",
     name: "Dragon Fang",
     type: "Shotgun",
     image: "/golden-pistol.png",
-    rarity: "reel-rare-red",
+    rarity: Rarities.red,
   },
   {
+    avatar: "/av1.png",
+    slot_number: "2",
     name: "Royal Etch",
     type: "Pistol",
     image: "/golden-pistol.png",
-    rarity: "reel-rare-gold",
+    rarity: Rarities.gold,
   },
   {
+    avatar: "/av3.png",
+    slot_number: "1",
     name: "Ultraviolet",
     type: "SMG",
     image: "/golden-pistol.png",
-    rarity: "reel-rare-violet",
+    rarity: Rarities.violet,
   },
   {
+    avatar: "/av2.png",
+    slot_number: "7",
     name: "Neon Circuit",
     type: "Rifle",
     image: "/golden-pistol.png",
-    rarity: "reel-rare-cyan",
+    rarity: Rarities.cyan,
   },
   {
+    avatar: "/av3.png",
+    slot_number: "21",
     name: "Dragon Fang",
     type: "Shotgun",
     image: "/golden-pistol.png",
-    rarity: "reel-rare-red",
+    rarity: Rarities.red,
   },
   {
-    name: "Royal Etch",
-    type: "Pistol",
+    avatar: "/av1.png",
+    slot_number: "14",
+    name: "Dragon Fang",
+    type: "Shotgun",
     image: "/golden-pistol.png",
-    rarity: "reel-rare-gold",
-  },
-  {
-    name: "Ultraviolet",
-    type: "SMG",
-    image: "/golden-pistol.png",
-    rarity: "reel-rare-violet",
+    rarity: Rarities.red,
   },
 ];
 export default function Home() {
@@ -96,23 +123,20 @@ export default function Home() {
                   {reelItems.map((item, index) => (
                     <div
                       key={`${item.name}-${index}`}
-                      className={`relative flex w-36 shrink-0 flex-col justify-between overflow-hidden border border-ink/10 bg-white/80 p-2.5 shadow-sm ${item.rarity}`}
+                      className={`relative flex w-36 shrink-0 flex-col justify-center overflow-hidden border border-ink/10 bg-white/80 p-2.5 shadow-sm items-center ${item.rarity}`}
                     >
                       <Image
-                        src={item.image}
-                        alt={`${item.name} ${item.type}`}
-                        width={768}
-                        height={512}
-                        className="h-24 w-full object-contain mix-blend-multiply "
+                        width={100}
+                        height={100}
+                        alt="avatar"
+                        className={`absolute top-3 right-3 size-4 rounded-full w-5 h-5 ${borders[item.rarity]} border-[1px]!`}
+                        src={item.avatar}
                       />
-                      <div>
-                        <p className="truncate text-[10px] font-semibold uppercase text-ink/40">
-                          {item.type}
-                        </p>
-                        <p className="truncate text-xs font-bold text-ink">
-                          {item.name}
-                        </p>
-                      </div>
+                      <span
+                        className={` text-2xl text-center font-bold w-full object-contain mix-blend-multiply  ${textColors[item.rarity]}`}
+                      >
+                        {item.slot_number}
+                      </span>
                     </div>
                   ))}
                 </div>
