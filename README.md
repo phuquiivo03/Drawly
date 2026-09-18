@@ -1,4 +1,5 @@
 # 🎁 Lucky Slot
+### Demo: https://drawly-omega.vercel.app/
 
 A simple social giveaway platform where users can create a giveaway, share an invite link, let others claim slots, and randomly select a winner.
 
@@ -59,12 +60,12 @@ Supabase Auth manages authentication and user identities.
 
 ---
 
-## 💰 Payment
+## 💰  Payment
 
 The platform can support both:
 
-- **Free events**
-- **Paid slots**
+- ✔️  **Free events**
+- ✖️ **Paid slots**
 
 For paid events, the platform does **not hold the money**.
 
@@ -86,7 +87,6 @@ Participants pay directly to the event owner through their configured payment me
 - Supabase Auth
 - Supabase PostgreSQL
 - Supabase Storage
-- Supabase Realtime
 
 No separate backend server is required for the MVP.
 
@@ -117,11 +117,10 @@ Main tables:
 
 The first version focuses on:
 
-- Create a giveaway
+- Create a Event
 - Generate shareable link
 - Join an event
 - Claim a slot
-- Realtime slot updates
 - Random winner selection
 - Winner/result page
 - Social login
