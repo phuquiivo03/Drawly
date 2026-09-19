@@ -17,6 +17,7 @@ export function DrawButton({ isSpinning, onClick }: DrawButtonProps) {
         onClick={onClick}
         disabled={isSpinning || event.status != EventStatus.LOCKED}
         size="lg"
+        id="draw-btn"
         className="h-12 min-w-52 rounded-xl bg-accent! px-8 text-base font-bold text-white shadow-lg shadow-accent/25 hover:bg-accent/90"
       >
         {isSpinning ? (

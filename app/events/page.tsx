@@ -27,9 +27,15 @@ export default function Events() {
   // @ts-ignore
   const [openForm, setOpenForm] = useState<boolean>(false);
   const [events, setEvents] = useState<EventWithPrize[]>();
+  const [participated, setParticipated] = useState<EventWithPrize[]>();
   useEffect(() => {
     fetcher<EventWithPrize[]>("/api/events").then((data) => {
       if (data.data) setEvents(data.data);
+    });
+    fetcher<EventWithPrize[]>("/api/events/participated").then((data) => {
+      if (data.data) {
+        setParticipated(data.data);
+      }
     });
   }, []);
 
@@ -37,8 +43,8 @@ export default function Events() {
     <DefaultLayout>
       {openForm && <CreateEventForm setOpen={setOpenForm} />}
       <div className="w-full flex justify-center ">
-        <div className="max-w-6xl w-full mt-10 rounded-[28px] border border-white/80 bg-white/60 p-5 shadow-2xl shadow-sky-200/45 backdrop-blur-2xl sm:p-6">
-          <div className="my-2 w-full flex justify-between">
+        <div className="space-y-4 max-w-6xl w-full mt-10 rounded-[28px] border border-white/80 bg-white/60 p-5 shadow-2xl shadow-sky-200/45 backdrop-blur-2xl sm:p-6">
+          <div className=" w-full flex justify-between">
             <span className="text-xl font-bold">My Events</span>
             <Button
               onClick={() => {
@@ -53,11 +59,20 @@ export default function Events() {
               New Event
             </Button>
           </div>
-          <div className="flex gap-4">
+          <div className="grid grid-cols-5 gap-4">
             {events &&
               events.map((event, index) => (
                 <EventCard key={index} event={event} />
               ))}
+          </div>
+          <div className="">
+            <span className="text-xl font-bold">Participated</span>
+            <div className="grid grid-cols-5 gap-4 flex-wrap justify-center mt-4">
+              {participated &&
+                participated.map((event, index) => (
+                  <EventCard key={index} event={event} />
+                ))}
+            </div>
           </div>
         </div>
       </div>

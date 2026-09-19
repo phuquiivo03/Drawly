@@ -62,10 +62,14 @@ export function RewardCard() {
 
       <div className="space-y-2">
         <div className="flex items-center gap-2">
-          <span className="ml-auto hidden shrink-0 rounded-full bg-emerald-100 px-3 py-1.5 text-xs font-bold text-emerald-700 sm:inline-flex">
+          <span
+            id="event-status"
+            className="ml-auto hidden shrink-0 rounded-full bg-emerald-100 px-3 py-1.5 text-xs font-bold text-emerald-700 sm:inline-flex"
+          >
             {event?.status}
           </span>
           <button
+            id="update-status-btn"
             disabled={
               !(user != null && event?.creator_id === user.id) ||
               event.status == EventStatus.CLOSE
@@ -104,7 +108,7 @@ export function RewardCard() {
             )}
           </button>
         </div>
-        <div className="flex items-center gap-2">
+        <div id="remaining-time" className="flex items-center gap-2">
           <Clock size={16} />
           {event.lock_at && <Countdown targetTime={event.lock_at} />}
         </div>

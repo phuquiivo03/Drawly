@@ -12,7 +12,6 @@ interface ParticipantsProps {
 
 export function Participants({ participants, winner }: ParticipantsProps) {
   const { event, slots } = useEventStore((state) => state);
-  console.log("event: ", event);
   return (
     <aside className="flex min-h-0 flex-col max-h-[80vh] rounded-[24px] border border-white/80 bg-white/60 p-4 shadow-2xl shadow-sky-200/45 backdrop-blur-2xl sm:p-5">
       <div className="flex items-start justify-between border-b border-ink/8 pb-4">

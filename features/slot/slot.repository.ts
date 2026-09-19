@@ -85,6 +85,15 @@ class SlotRepository {
     if (error) throw new Error("Fail to find participant");
     return data;
   }
+
+  async findByUser(userId: string): Promise<Slot[] | null> {
+    const { data, error } = await this.supabaseClient
+      .from("slots")
+      .select("*")
+      .eq("user_id", userId);
+    if (error) throw new Error("Fail to find participant");
+    return data;
+  }
 }
 const slotRepository = new SlotRepository();
 export default slotRepository;

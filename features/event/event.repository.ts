@@ -35,7 +35,6 @@ class EventRepository {
   }
 
   async create(event: CreateEvent): Promise<Event | null> {
-    console.log("create data", event);
     const { data, error } = await this.supabaseClient
       .from("events")
       .insert({ ...event, status: EventStatus.OPEN })

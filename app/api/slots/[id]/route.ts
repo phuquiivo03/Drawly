@@ -11,7 +11,7 @@ export async function POST(req: NextRequest, { params }: RouteContext) {
   try {
     const { id } = await params;
     if (!id) throw new Error("Event Id not found");
-    const profile = await requireAuth(req);
+    const profile = await requireAuth();
     if (!profile) throw new Error("Authen is require");
     // check status
     const result = await slotServices.checkAndUpdateSlot(

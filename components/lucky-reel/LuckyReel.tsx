@@ -91,7 +91,6 @@ export default function LuckyReel({ participants }: Props) {
       // Stash the winner and let the effect below do the animation
       // once React has actually committed `items` to the DOM.
       pendingWinnerRef.current = winnerSlot;
-      console.log("winner slot", winnerSlot, "new reel to set", newReel);
       setItems(newReel);
 
       setEvent({ ...event, status: EventStatus.CLOSE });
@@ -103,7 +102,6 @@ export default function LuckyReel({ participants }: Props) {
   };
 
   useLayoutEffect(() => {
-    console.log("start reel with", items);
     const winnerSlot = pendingWinnerRef.current;
     if (!winnerSlot) return; // not a spin-triggered update (e.g. initial mount)
 

@@ -51,7 +51,13 @@ const getWinners = async (
   return slots;
 };
 
+const findManySlotByUser = async (id: string): Promise<Slot[] | null> => {
+  const slots = await slotRepository.findByUser(id);
+  return slots;
+};
+
 const slotServices = {
+  findManySlotByUser,
   createSlot,
   createManySlots,
   findManySlots,

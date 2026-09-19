@@ -29,7 +29,6 @@ export async function GET(req: NextRequest, { params }: RouteContext) {
     cookieStore.set("demoAccount", JSON.stringify(profileData));
     return Response.json(responseData);
   } catch (e) {
-    console.log(e);
     return Response.json({
       success: false,
       status: 500,

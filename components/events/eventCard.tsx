@@ -1,5 +1,4 @@
 import { EventWithPrize } from "@/features/event/event.schema";
-import { Prize } from "@/features/prize/prize.schema";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -9,13 +8,13 @@ type Props = {
 function EventCard({ event }: Props) {
   const prize = event.prizes[0];
   return (
-    <div className="w-[300px] h-[300px] shadow-2xl! hover:shadow-blue-300 transition-all ease-in duration-150 rounded-2xl p-2">
+    <div className="w-[200px]  shadow-2xl! hover:shadow-blue-300 transition-all ease-in duration-150 rounded-2xl p-2">
       {event ? (
         <Link href={`/events/${event.id}`} className="cursor-pointer">
           <Image
             width={100}
             height={100}
-            className="h-[200px] rounded-t-2xl w-full"
+            className="h-[130px] rounded-t-2xl w-full"
             alt={prize.images[0]}
             src={prize.images[0]}
           />

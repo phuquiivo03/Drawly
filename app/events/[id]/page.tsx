@@ -7,6 +7,31 @@ import { Button } from "@/components/ui/button";
 import { SlotExpand } from "@/features/slot/slot.schema";
 import { useEventStore } from "@/stores/events.store";
 import { Suspense, useEffect, useRef, useState } from "react";
+import { Joyride } from "react-joyride";
+const steps = [
+  {
+    target: "#event-status",
+    content: "View the current status of this event.",
+  },
+  {
+    target: "#update-status-btn",
+    content: (
+      <span>
+        Click here to <em className="text-accent">lock</em> or{" "}
+        <em className="text-accent">unlock</em> the event. Only locked events
+        can be started.
+      </span>
+    ),
+  },
+  {
+    target: "#remaining-time",
+    content: "See the time remaining until the event is locked.",
+  },
+  {
+    target: "#draw-btn",
+    content: "Click here to start the draw.",
+  },
+];
 
 export default function Page({ id }: { id: string }) {
   const [winner, setWinner] = useState<string>();
@@ -48,6 +73,7 @@ export default function Page({ id }: { id: string }) {
   }, [event]);
   return (
     <DefaultLayout>
+      <Joyride run continuous steps={steps} />
       <div className="grid min-h-0 flex-1 grid-cols-1 gap-4 pt-4 lg:grid-cols-[minmax(0,1fr)_300px] lg:gap-5">
         <section className="grid min-h-0 grid-rows-[auto_minmax(0,1fr)_auto] gap-4 rounded-[24px] border border-white/80 bg-white/55 p-4 shadow-2xl shadow-sky-200/50 backdrop-blur-2xl sm:p-5 lg:p-6">
           <RewardCard />
