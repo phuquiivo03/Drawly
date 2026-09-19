@@ -1,8 +1,23 @@
 import profileServices from "@/features/profile/profile.service";
 import { createClient } from "@/infrastructure/supabase/server";
-import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function requireAuth() {
+export async function requireAuth(req: NextRequest) {
+  // const { searchParams } = new URL(req.url);
+  const cookieStore = await cookies();
+  const isDemo = cookieStore.get("demo")?.value === "true";
+  const demoAccount =
+    JSON.parse(cookieStore.get("demoAccount")?.value || "") || undefined;
+  console.log("=-=-=-=", demoAccount, isDemo);
+  if (isDemo && demoAccount) {
+    if (demoAccount) {
+      return {
+        profile: demoAccount,
+        response: null,
+      };
+    }
+  }
   const supabase = await createClient();
 
   const {

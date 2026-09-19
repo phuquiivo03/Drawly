@@ -6,7 +6,6 @@ import { Event, EventStatus } from "@/features/event/event.schema";
 import { toast } from "react-toastify";
 import { AppResponse } from "@/app/api/type";
 import { useUserStore } from "@/stores/user.store";
-import LoadingSkeleton from "../ui/loadingSkeleton";
 import { RewardCardLoading } from "./RewardCardLoading";
 import Countdown from "../ui/countdown";
 

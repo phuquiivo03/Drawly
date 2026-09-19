@@ -6,7 +6,8 @@ import { RewardCard } from "@/components/events/RewardCard";
 import DefaultLayout from "@/components/layout/default";
 import Reel from "@/components/lucky-reel/page";
 import { Button } from "@/components/ui/button";
-import { EventWithPrize } from "@/features/event/event.schema";
+import { Event, EventWithPrize } from "@/features/event/event.schema";
+import { fetcher } from "@/lib/helper";
 import { useEffect, useRef, useState } from "react";
 
 const participants = [
@@ -27,11 +28,9 @@ export default function Events() {
   const [openForm, setOpenForm] = useState<boolean>(false);
   const [events, setEvents] = useState<EventWithPrize[]>();
   useEffect(() => {
-    fetch("/api/events")
-      .then((res) => res.json())
-      .then((data) => {
-        setEvents(data.data);
-      });
+    fetcher<EventWithPrize[]>("/api/events").then((data) => {
+      if (data.data) setEvents(data.data);
+    });
   }, []);
 
   return (

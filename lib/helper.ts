@@ -1,3 +1,4 @@
+import { AppResponse } from "@/app/api/type";
 import { CreateSlot, ShortSlot } from "@/features/slot/slot.schema";
 
 export const createSlotsData = (max: number, eventId: string): CreateSlot[] => {
@@ -15,4 +16,12 @@ export const createSlotsData = (max: number, eventId: string): CreateSlot[] => {
 
 export function createParticipantsPayload(slots: ShortSlot[]) {
   return slots.map((slot) => `${slot.slot_number}:${slot.user_id}`).join("|");
+}
+
+export async function fetcher<T>(
+  url: string,
+  options?: RequestInit,
+): Promise<AppResponse<T>> {
+  const result = await fetch(url, options);
+  return result.json();
 }

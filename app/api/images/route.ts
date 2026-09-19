@@ -1,9 +1,9 @@
 import { supabaseAdmin } from "@/infrastructure/supabase/admin";
 import { requireAuth } from "@/lib/auth";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(request: Request) {
-  const { profile, response } = await requireAuth();
+export async function POST(request: NextRequest) {
+  const { profile, response } = await requireAuth(request);
   if (!profile) {
     if (response) return response;
     throw new Error("Unauthen");

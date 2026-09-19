@@ -8,7 +8,6 @@ import { LoaderCircle } from "lucide-react";
 export default function FacebookLogin() {
   const [loading, setLoading] = useState(false);
   const supabase = createClient();
-
   const handleLogin = async () => {
     setLoading(true);
     const { error } = await supabase.auth.signInWithOAuth({

@@ -13,7 +13,7 @@ import { NextRequest } from "next/server";
 export async function POST(req: NextRequest): Promise<Response> {
   try {
     const body = await req.json();
-    const { profile } = await requireAuth();
+    const { profile } = await requireAuth(req);
     if (!profile) throw new Error("Unauthorized");
     const parseResult = createEventRequestSchema.safeParse(body);
     if (!parseResult.success) {
@@ -66,9 +66,9 @@ export async function POST(req: NextRequest): Promise<Response> {
   }
 }
 
-export async function GET(): Promise<Response> {
+export async function GET(req: NextRequest): Promise<Response> {
   try {
-    const { profile } = await requireAuth();
+    const { profile } = await requireAuth(req);
     if (!profile) throw new Error("Unauthorized");
     const winners = await eventServices.findManyUserEvents(profile?.id);
     if (!winners) throw new Error("Failed to get winners");
@@ -78,6 +78,7 @@ export async function GET(): Promise<Response> {
       data: winners,
     });
   } catch (e) {
+    console.log(e);
     return Response.json({
       success: false,
       status: 400,

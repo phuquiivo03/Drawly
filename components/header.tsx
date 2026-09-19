@@ -20,6 +20,7 @@ const pages = [
 function Header() {
   const [show, setShow] = useState<boolean>(false);
   const user = useUserStore((state) => state.user);
+
   return (
     <div className="">
       {/* HEADER */}
@@ -66,7 +67,7 @@ function Header() {
           )}
         </div>
       </header>
-      {show && <SigninOption open={show} setOpen={setShow} />}
+      {show && user === null && <SigninOption open={show} setOpen={setShow} />}
     </div>
   );
 }

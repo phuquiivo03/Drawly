@@ -1,5 +1,6 @@
 import { X } from "lucide-react";
 import FacebookLogin from "./facebookLogin";
+import DemoLogin from "./demoLogin";
 type Props = {
   open: boolean;
   setOpen: (val: boolean) => void;
@@ -16,8 +17,9 @@ function SigninOption(props: Props) {
       </button>
       <div className="p-12 rounded-2xl flex flex-col bg-white gap-6">
         <span className="text-xl font-bold  block">Sign in</span>
-        <div className="">
+        <div className="flex flex-col gap-4">
           <FacebookLogin />
+          <DemoLogin />
         </div>
       </div>
     </div>
