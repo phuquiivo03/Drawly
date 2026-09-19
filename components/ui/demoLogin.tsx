@@ -51,7 +51,7 @@ export default function DemoLogin() {
     >
       Login with Demo account
       {loading ? <LoaderCircle className="animate-spin" /> : <ChevronDown />}
-      <div className="absolute top-[100%] left-0 hidden group-hover:block shadow-2xl p-4 rounded-md space-y-2 bg-white">
+      <div className="absolute top-[100%] left-0 hidden group-focus:block group-hover:block shadow-2xl p-4 rounded-md space-y-2 bg-white">
         {demoAccounts.map((account, index) => (
           <div
             onClick={() => {

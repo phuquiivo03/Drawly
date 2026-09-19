@@ -8,25 +8,16 @@ import Reel from "@/components/lucky-reel/page";
 import { Button } from "@/components/ui/button";
 import { Event, EventWithPrize } from "@/features/event/event.schema";
 import { fetcher } from "@/lib/helper";
+import { useAppStore } from "@/stores/app.store";
+import { useUserStore } from "@/stores/user.store";
 import { useEffect, useRef, useState } from "react";
-
-const participants = [
-  ["AR", "Ava Reynolds"],
-  ["JM", "Jordan Miller"],
-  ["SK", "Sam Kim"],
-  ["MP", "Mia Patel"],
-  ["LN", "Leo Nguyen"],
-  ["OT", "Olivia Taylor"],
-  ["NC", "Noah Chen"],
-  ["ES", "Emma Stone"],
-  ["WB", "William Brown"],
-  ["SH", "Sofia Hernandez"],
-];
 
 export default function Events() {
   // @ts-ignore
   const [openForm, setOpenForm] = useState<boolean>(false);
   const [events, setEvents] = useState<EventWithPrize[]>();
+  const { user } = useUserStore();
+  const { setShowLogin } = useAppStore();
   const [participated, setParticipated] = useState<EventWithPrize[]>();
   useEffect(() => {
     fetcher<EventWithPrize[]>("/api/events").then((data) => {
@@ -48,7 +39,8 @@ export default function Events() {
             <span className="text-xl font-bold">My Events</span>
             <Button
               onClick={() => {
-                setOpenForm(true);
+                if (user == null) setShowLogin(true);
+                else setOpenForm(true);
               }}
               size="lg"
               className="group inline-flex cursor-pointer items-center gap-2.5 rounded-2xl bg-accent! px-4! py-4 text-base font-bold text-white shadow-xl shadow-accent/30 transition  hover:shadow-2xl"

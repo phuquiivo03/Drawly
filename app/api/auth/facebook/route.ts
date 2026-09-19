@@ -6,9 +6,19 @@ import {
 import profileServices from "@/features/profile/profile.service";
 import { createClient } from "@/infrastructure/supabase/server";
 import { AppResponse } from "../../type";
+import { checkAndGetDemoUser } from "@/lib/auth";
 
 export async function GET() {
   try {
+    const demoAccountOrNull = await checkAndGetDemoUser();
+    console.log("demoAccountOrNull", demoAccountOrNull);
+    if (demoAccountOrNull !== null) {
+      return Response.json({
+        status: 200,
+        success: true,
+        data: demoAccountOrNull,
+      });
+    }
     const supabase = await createClient();
     const {
       data: { user },

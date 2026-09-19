@@ -7,6 +7,7 @@ import SigninOption from "./ui/signinOptions";
 import ProfileMenu from "./ui/profileMenu";
 import Link from "next/link";
 import { Film } from "lucide-react";
+import { useAppStore } from "@/stores/app.store";
 const pages = [
   {
     title: "Events",
@@ -18,7 +19,7 @@ const pages = [
   },
 ];
 function Header() {
-  const [show, setShow] = useState<boolean>(false);
+  const { setShowLogin: setShow, showLogin: show } = useAppStore((s) => s);
   const user = useUserStore((state) => state.user);
 
   return (

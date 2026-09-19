@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CalendarClock, Loader, Loader2, Users, X } from "lucide-react";
 import { json, z } from "zod";
 
@@ -12,6 +12,8 @@ import { compressImage } from "@/lib/image.helper";
 import { toast } from "react-toastify";
 import { CreateEventRequest } from "@/features/event/event.schema";
 import { useRouter } from "next/navigation";
+import { useUserStore } from "@/stores/user.store";
+import { useAppStore } from "@/stores/app.store";
 
 const eventSchema = z.object({
   name: z
@@ -68,7 +70,8 @@ export default function CreateEventForm({
     { url: string; name: string; file: File }[]
   >([]);
   const [errors, setErrors] = useState<FormErrors>({});
-
+  const user = useUserStore((s) => s.user);
+  const { setShowLogin } = useAppStore((s) => s);
   const addImages = async (files: FileList | null) => {
     if (!files) return;
     const next = await Promise.all(
@@ -95,6 +98,16 @@ export default function CreateEventForm({
     setErrors((prev) => ({ ...prev, images: undefined }));
   };
 
+  useEffect(() => {
+    const isLogIn = user !== null;
+    console.log(user, isLogIn);
+    if (!isLogIn) {
+      setShowLogin(true);
+      toast.warn("Authen is requried");
+      return;
+    }
+  }, []);
+
   const removeImage = (index: number) => {
     setImages((prev) => {
       const removed = prev[index];
@@ -107,6 +120,7 @@ export default function CreateEventForm({
   const handleSubmit = async (event: React.FormEvent) => {
     setLoading(true);
     event.preventDefault();
+
     const result = eventSchema.safeParse({
       name,
       description,
@@ -195,175 +209,177 @@ export default function CreateEventForm({
     "w-full rounded-xl border border-ink/10 bg-white/80 px-4 py-3 text-sm font-medium text-ink outline-none transition placeholder:text-ink/35 focus:border-brand focus:ring-2 focus:ring-brand/20";
 
   return (
-    <div className="relative mx-auto max-w-2xl px-5 py-6 sm:px-8">
-      <form
-        onSubmit={handleSubmit}
-        className="mt-6 rounded-[24px] border border-white/80 bg-white/60 p-6 shadow-2xl shadow-sky-200/50 backdrop-blur-2xl sm:p-8"
-      >
-        <h1 className="font-display text-2xl font-bold sm:text-3xl">
-          Create a new event
-        </h1>
-        <p className="mt-1 text-sm text-ink/55">
-          Set the reward, the slots, and when the draw locks and spins.
-        </p>
+    <div className="absolute inset-0 z-100 overflow-y-auto bg-white">
+      <div className="mx-auto max-w-2xl px-5 py-6 sm:px-8">
+        <form
+          onSubmit={handleSubmit}
+          className="mt-6 rounded-[24px] border border-white/80 bg-white/60 p-6 shadow-2xl shadow-sky-200/50 backdrop-blur-2xl sm:p-8"
+        >
+          <h1 className="font-display text-2xl font-bold sm:text-3xl">
+            Create a new event
+          </h1>
+          <p className="mt-1 text-sm text-ink/55">
+            Set the reward, the slots, and when the draw locks and spins.
+          </p>
 
-        <div className="mt-6 space-y-5">
-          <Input
-            id={"event-name"}
-            label={<>Prize name</>}
-            value={name}
-            onChange={(val) => {
-              if (errors.name) setErrors({ ...errors, name: undefined });
-              setName(val as string);
-            }}
-            className=""
-          >
-            {errors.name}
-          </Input>
-
-          <div>
-            <label
-              htmlFor="event-description"
-              className="mb-1.5 block text-xs font-bold uppercase tracking-wide text-ink/50"
-            >
-              Description
-            </label>
-            <textarea
-              id="event-description"
-              value={description}
-              onChange={(e) => {
-                if (errors.description)
-                  setErrors({ ...errors, description: undefined });
-                setDescription(e.target.value);
-              }}
-              placeholder="What is this draw about?"
-              maxLength={500}
-              rows={3}
-              className={`${inputClass} resize-none`}
-            />
-            {errors.description && (
-              <p className="mt-1.5 text-xs font-semibold text-accent">
-                {errors.description}
-              </p>
-            )}
-          </div>
-
-          <div className="grid gap-5 sm:grid-cols-2">
+          <div className="mt-6 space-y-5">
             <Input
-              type="number"
-              id="event-slots"
-              label={
-                <>
-                  <Users className="size-3.5" /> Max slots
-                </>
-              }
-              value={maxSlots}
+              id={"event-name"}
+              label={<>Prize name</>}
+              value={name}
               onChange={(val) => {
-                if (errors.maxSlots)
-                  setErrors({ ...errors, maxSlots: undefined });
-                setMaxSlots(val as string);
+                if (errors.name) setErrors({ ...errors, name: undefined });
+                setName(val as string);
               }}
               className=""
             >
-              {errors.maxSlots}
+              {errors.name}
             </Input>
-            <Input
-              type="number"
-              id="event-slots"
-              label={
-                <>
-                  <Users className="size-3.5" /> Slots per User
-                </>
-              }
-              value={`${slotsPerUser}`}
-              onChange={(val) => {
-                if (errors.slotsPerUser)
-                  setErrors({ ...errors, slotsPerUser: undefined });
-                setSlotsPerUser(parseInt(val as string));
-              }}
-              className=""
-            >
-              {errors.slotsPerUser}
-            </Input>
-            <Input
-              type="datetime-local"
-              id="event-lock-time"
-              label={
-                <>
-                  <CalendarClock className="size-3.5" /> Locks &amp; draws at
-                  (optional)
-                </>
-              }
-              value={lockTime}
-              onChange={(val) => setLockTime(val as string)}
-              className=""
-            >
-              {errors.lockTime}
-            </Input>
-          </div>
 
-          <div>
-            <span className="mb-1.5 block text-xs font-bold uppercase tracking-wide text-ink/50">
-              Reward images
-            </span>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              multiple
-              className="hidden"
-              onChange={(e) => {
-                addImages(e.target.files);
-                e.target.value = "";
-              }}
-            />
-            <div className="grid grid-cols-4 gap-3">
-              {images.map((image, index) => (
-                <UploadedImage
-                  key={index}
-                  url={image.url}
-                  name={image.name}
-                  removeImage={removeImage}
-                  index={index}
-                />
-              ))}
-              {images.length < 8 && (
-                <UploadImageButton fileInputRef={fileInputRef} />
+            <div>
+              <label
+                htmlFor="event-description"
+                className="mb-1.5 block text-xs font-bold uppercase tracking-wide text-ink/50"
+              >
+                Description
+              </label>
+              <textarea
+                id="event-description"
+                value={description}
+                onChange={(e) => {
+                  if (errors.description)
+                    setErrors({ ...errors, description: undefined });
+                  setDescription(e.target.value);
+                }}
+                placeholder="What is this draw about?"
+                maxLength={500}
+                rows={3}
+                className={`${inputClass} resize-none`}
+              />
+              {errors.description && (
+                <p className="mt-1.5 text-xs font-semibold text-accent">
+                  {errors.description}
+                </p>
               )}
             </div>
-            <p className="mt-1.5 text-xs text-ink/40">
-              Up to 8 images. The first one is shown as the main reward.
-            </p>
-            {errors.images && (
-              <p className="mt-1.5 text-xs font-semibold text-accent">
-                {errors.images}
-              </p>
-            )}
-          </div>
-        </div>
 
-        <div className="mt-8 flex items-center justify-end gap-3">
-          <Button
-            asChild
-            variant="ghost"
-            className="rounded-xl text-ink/60"
-            onClick={() => {
-              setOpen(false);
-            }}
-          >
-            <span>
-              <X /> Cancel
-            </span>
-          </Button>
-          <Button
-            type="submit"
-            size="lg"
-            className="rounded-xl bg-accent! px-8 font-bold text-white shadow-lg shadow-accent/25 hover:bg-accent/90"
-          >
-            Create event {loading && <Loader2 className="animate-spin" />}
-          </Button>
-        </div>
-      </form>
+            <div className="grid gap-5 sm:grid-cols-2">
+              <Input
+                type="number"
+                id="event-slots"
+                label={
+                  <>
+                    <Users className="size-3.5" /> Max slots
+                  </>
+                }
+                value={maxSlots}
+                onChange={(val) => {
+                  if (errors.maxSlots)
+                    setErrors({ ...errors, maxSlots: undefined });
+                  setMaxSlots(val as string);
+                }}
+                className=""
+              >
+                {errors.maxSlots}
+              </Input>
+              <Input
+                type="number"
+                id="event-slots"
+                label={
+                  <>
+                    <Users className="size-3.5" /> Slots per User
+                  </>
+                }
+                value={`${slotsPerUser}`}
+                onChange={(val) => {
+                  if (errors.slotsPerUser)
+                    setErrors({ ...errors, slotsPerUser: undefined });
+                  setSlotsPerUser(parseInt(val as string));
+                }}
+                className=""
+              >
+                {errors.slotsPerUser}
+              </Input>
+              <Input
+                type="datetime-local"
+                id="event-lock-time"
+                label={
+                  <>
+                    <CalendarClock className="size-3.5" /> Locks &amp; draws at
+                    (optional)
+                  </>
+                }
+                value={lockTime}
+                onChange={(val) => setLockTime(val as string)}
+                className=""
+              >
+                {errors.lockTime}
+              </Input>
+            </div>
+
+            <div>
+              <span className="mb-1.5 block text-xs font-bold uppercase tracking-wide text-ink/50">
+                Reward images
+              </span>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                multiple
+                className="hidden"
+                onChange={(e) => {
+                  addImages(e.target.files);
+                  e.target.value = "";
+                }}
+              />
+              <div className="grid grid-cols-4 gap-3">
+                {images.map((image, index) => (
+                  <UploadedImage
+                    key={index}
+                    url={image.url}
+                    name={image.name}
+                    removeImage={removeImage}
+                    index={index}
+                  />
+                ))}
+                {images.length < 8 && (
+                  <UploadImageButton fileInputRef={fileInputRef} />
+                )}
+              </div>
+              <p className="mt-1.5 text-xs text-ink/40">
+                Up to 8 images. The first one is shown as the main reward.
+              </p>
+              {errors.images && (
+                <p className="mt-1.5 text-xs font-semibold text-accent">
+                  {errors.images}
+                </p>
+              )}
+            </div>
+          </div>
+
+          <div className="mt-8 flex items-center justify-end gap-3">
+            <Button
+              asChild
+              variant="ghost"
+              className="rounded-xl text-ink/60"
+              onClick={() => {
+                setOpen(false);
+              }}
+            >
+              <span>
+                <X /> Cancel
+              </span>
+            </Button>
+            <Button
+              type="submit"
+              size="lg"
+              className="rounded-xl bg-accent! px-8 font-bold text-white shadow-lg shadow-accent/25 hover:bg-accent/90"
+            >
+              Create event {loading && <Loader2 className="animate-spin" />}
+            </Button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
