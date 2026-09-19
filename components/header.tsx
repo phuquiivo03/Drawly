@@ -57,12 +57,9 @@ function Header() {
                 onClick={() => {
                   setShow(true);
                 }}
-                className="hidden cursor-pointer rounded-full border border-ink/10 bg-white/60 px-5 py-2.5 text-sm font-semibold text-ink backdrop-blur transition hover:bg-white sm:inline-flex"
+                className="cursor-pointer rounded-full border border-ink/10 bg-white/60 px-5 py-2.5 text-sm font-semibold text-ink backdrop-blur transition hover:bg-white sm:inline-flex"
               >
                 Sign in
-              </button>
-              <button className="cursor-pointer rounded-full bg-ink px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-ink/20 transition hover:-translate-y-0.5">
-                Launch reel
               </button>
             </>
           )}

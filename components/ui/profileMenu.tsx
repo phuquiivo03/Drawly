@@ -32,6 +32,9 @@ function ProfileMenu() {
       onMouseLeave={() => {
         setOpen(false);
       }}
+      onClick={() => {
+        setOpen(!open);
+      }}
     >
       <div className=" flex gap-2  items-center">
         <span className="text-black font-bold text-md">

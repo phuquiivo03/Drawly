@@ -28,6 +28,7 @@ const demoAccounts = [
 
 export default function DemoLogin() {
   const [loading, setLoading] = useState(false);
+  const [show, setShow] = useState(false);
   const { setUser } = useUserStore((s) => s);
   const handleLoginDemoAccount = async (id: string) => {
     setLoading(true);
@@ -48,10 +49,15 @@ export default function DemoLogin() {
     <Button
       className="bg-accent! text-white! relative group"
       variant="secondary"
+      onClick={() => {
+        setShow(!show);
+      }}
     >
       Login with Demo account
       {loading ? <LoaderCircle className="animate-spin" /> : <ChevronDown />}
-      <div className="absolute top-[100%] left-0 hidden group-focus:block group-hover:block shadow-2xl p-4 rounded-md space-y-2 bg-white">
+      <div
+        className={` ${show ? "max-sm:block!" : ""} absolute top-[100%] left-0 hidden  group-hover:block shadow-2xl p-4 rounded-md space-y-2 bg-white`}
+      >
         {demoAccounts.map((account, index) => (
           <div
             onClick={() => {
