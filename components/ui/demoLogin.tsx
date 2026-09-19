@@ -10,7 +10,7 @@ import { useUserStore } from "@/stores/user.store";
 const demoAccounts = [
   {
     id: "6d7e1a08-e4df-44f8-a5ca-bf928cf96b93",
-    name: "Kim Tiến",
+    name: "Leonardo DicapriKng",
   },
   {
     id: "123e4567-e89b-12d3-a456-426614174000",
@@ -22,7 +22,7 @@ const demoAccounts = [
   },
   {
     id: "b8e9f56e-142d-429a-ae02-370f6f2b3732",
-    name: "Phú Quí",
+    name: "Mi Vin",
   },
 ];
 
